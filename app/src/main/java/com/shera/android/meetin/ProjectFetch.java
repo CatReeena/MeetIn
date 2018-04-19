@@ -3,6 +3,8 @@ package com.shera.android.meetin;
 import android.net.Uri;
 import android.util.Log;
 
+import com.shera.android.meetin.entities.Project;
+
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;

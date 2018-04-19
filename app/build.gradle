@@ -36,5 +36,7 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.squareup.picasso:picasso:2.5.0'
     compile 'org.springframework.android:spring-android-rest-template:2.0.0.M3'
+    compile group: 'org.joda', name: 'joda-money', version: '0.6'
+    compile 'com.jakewharton.threetenabp:threetenabp:1.0.5'
     testCompile 'junit:junit:4.12'
 }

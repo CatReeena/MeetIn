@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.shera.android.meetin.entities.Project;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -41,7 +42,7 @@ public class ProjectListFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         fetchItemsTask = new FetchItemsTask();
-        fetchItemsTask.execute(new TaskFilters(null,null)); //--------------IMPLEMENT PARAMS----------------------
+        fetchItemsTask.execute(new TaskFilters()); //--------------IMPLEMENT PARAMS----------------------
         setRetainInstance(true);
     }
 
@@ -105,9 +106,15 @@ public class ProjectListFragment extends Fragment {
 
         public void bindProject(Project project) {
             mProject = project;
-            Picasso.with(getActivity())
-                    .load(mProject.imageLinks[0])
-                    .into(mProjectImage);
+            mProjectName.setText(mProject.getName());
+            if(mProject.getImageLinks() != null) {
+                if (mProject.getImageLinks().get(0) != null) {
+                    Picasso.with(getActivity())
+                            .load(mProject.getImageLinks().get(0))
+                            .into(mProjectImage);
+                }
+            }
+            if(project.get)
 
         }
 
@@ -143,7 +150,6 @@ public class ProjectListFragment extends Fragment {
             return mProjectItems.size();
         }
     }
-
 
     private class FetchItemsTask extends AsyncTask<TaskFilters,Void,List<Project>> {
 

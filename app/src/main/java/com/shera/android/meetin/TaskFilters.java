@@ -1,5 +1,7 @@
 package com.shera.android.meetin;
 
+import com.shera.android.meetin.entities.Category;
+
 import java.util.UUID;
 
 /**
