@@ -8,6 +8,7 @@ import java.util.UUID;
 
 public class TaskFilters {
     private UUID id;
+    ProjectPosition projectPosition;
     private Category category;
     private boolean followedFilterOn = false;
     private boolean successfulFilterOn = false;
@@ -22,6 +23,7 @@ public class TaskFilters {
     }
 
     public TaskFilters(UUID id,
+                       ProjectPosition projectPosition,
                        Category category,
                        boolean followedFilterOn,
                        boolean successfulFilterOn,
@@ -30,6 +32,7 @@ public class TaskFilters {
                        boolean mostFundedFilterOn,
                        boolean endDateFilterOn) {
         this.id = id;
+        this.projectPosition = projectPosition;
         this.category = category;
         this.followedFilterOn = followedFilterOn;
         this.successfulFilterOn = successfulFilterOn;
@@ -102,5 +105,18 @@ public class TaskFilters {
     public void setEndDateFilterOn(boolean endDateFilterOn) {
         this.endDateFilterOn = endDateFilterOn;
     }
+
+    public ProjectPosition getProjectPosition() {
+        return projectPosition;
+    }
+
+    public void setProjectPosition(ProjectPosition projectPosition) {
+        this.projectPosition = projectPosition;
+    }
+
+    public static enum ProjectPosition {
+        FIRST_PROJECT, LAST_PROJECT
+    }
+
 }
 

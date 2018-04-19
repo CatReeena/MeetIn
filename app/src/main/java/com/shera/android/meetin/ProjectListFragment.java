@@ -18,6 +18,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
 import java.util.UUID;
 
 /**
@@ -107,6 +108,7 @@ public class ProjectListFragment extends Fragment {
             Picasso.with(getActivity())
                     .load(mProject.imageLinks[0])
                     .into(mProjectImage);
+
         }
 
         @Override
@@ -145,18 +147,29 @@ public class ProjectListFragment extends Fragment {
 
     private class FetchItemsTask extends AsyncTask<TaskFilters,Void,List<Project>> {
 
-
         @Override
         protected List<Project> doInBackground(TaskFilters... params) {
-
-            Category category = params[0].category;
-            return new ArrayList<Project>();
+            return new ProjectFetch().downloadProjects(params[0]);
         }
 
         @Override
         protected void onPostExecute(List<Project> items) {
-            mProjectItems.addAll(items);
-            setupAdapter();
+            if(items != null) {
+                mProjectItems.addAll(items);
+                setupAdapter();
+            }
+        }
+    }
+
+    private class FetchFreshItemsTask extends FetchItemsTask{
+
+        @Override
+        protected void onPostExecute(List<Project> items) {
+            if(items != null) {
+
+                mProjectItems.addAll(0,items);
+                setupAdapter();
+            }
         }
     }
 
