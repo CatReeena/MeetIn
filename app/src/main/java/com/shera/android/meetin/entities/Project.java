@@ -1,65 +1,41 @@
+
 package com.shera.android.meetin.entities;
 
-
-
-
-
-
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Objects;
-import java.util.Set;
-import java.util.UUID;
+import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
+import com.shera.android.meetin.JodaMoneyDeserializer;
 
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
-import org.threeten.bp.LocalDateTime;
+import org.joda.time.LocalDateTime;
 
+import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 public class Project {
-
-
     private UUID id;
-    private String name ="";
-    private String description ="";
+    private String name;
+    private String description;
     private Location location;
     private LocalDateTime startDateTime;
     private LocalDateTime endDateTime;
+    @JsonDeserialize(using= JodaMoneyDeserializer.class)
     private Money fundingGoal;
+
     private List<String> videoLinks = new ArrayList<>();
     private List<String> imageLinks = new ArrayList<>();
-    private Set<Person> owners = new HashSet<>();
-    private Set<Person> subscribers = new HashSet<>();
-    private Set<Contribution> contributions = new HashSet<>();
-    private Set<Comment> comments = new HashSet<>();
-    private Set<Faq> faqs = new HashSet<>();
-    private Set<Category> categories = new HashSet<>();
-    private Set<Update> updates = new HashSet<>();
-    private Set<Reward> rewards = new HashSet<>();
 
-    /**
-     * Constructs new project.
-     *
-     * @param name name of the project
-     * @param description description
-     * @param fundingGoal funding goal of the project
-     * @param owners owners of the project
-     */
-    public Project(String name, String description, Money fundingGoal, Person... owners) {
-        this.name = name;
-        this.description = description;
-        this.fundingGoal = fundingGoal;
-        for(Person owner : owners) {
-            addOwner(owner);
-        }
-        this.id = UUID.randomUUID();
-    }
+    private List<UUID> owners = new ArrayList<>();
+    private List<UUID> subscribers = new ArrayList<>();
+    private List<UUID> contributions = new ArrayList<>();
+    private List<UUID> comments = new ArrayList<>();
+    private List<UUID> faqs = new ArrayList<>();
+    private List<UUID> categories = new ArrayList<>();
+    private List<UUID> updates = new ArrayList<>();
+    private List<UUID> rewards = new ArrayList<>();
 
-    protected Project() {
+    public Project() {
 
     }
 
@@ -123,14 +99,6 @@ public class Project {
         return videoLinks;
     }
 
-    public void addVideoLink(String link) {
-        videoLinks.add(link);
-    }
-
-    public void removeVideoLink(String link) {
-        videoLinks.remove(link);
-    }
-
     public void setVideoLinks(List<String> videoLinks) {
         this.videoLinks = videoLinks;
     }
@@ -139,196 +107,91 @@ public class Project {
         return imageLinks;
     }
 
-    public void addImageLink(String link) {
-        imageLinks.add(link);
-    }
-
-    public void removeImageLink(String link) {
-        imageLinks.remove(link);
-    }
-
     public void setImageLinks(List<String> imageLinks) {
         this.imageLinks = imageLinks;
     }
 
-    public Set<Person> getOwners() {
+    public List<UUID> getOwners() {
         return owners;
     }
 
-    public void addOwner(Person owner) {
-        owners.add(owner);
-        owner.getCreatedProjects().add(this);
-    }
-
-    public void removeOwner(Person owner) {
-        owners.remove(owner);
-        owner.getCreatedProjects().remove(this);
-    }
-
-    public void setOwners(Set<Person> owners) {
+    public void setOwners(List<UUID> owners) {
         this.owners = owners;
     }
 
-    public Set<Person> getSubscribers() {
+    public List<UUID> getSubscribers() {
         return subscribers;
     }
 
-    public void addSubscriber(Person subscriber) {
-        subscribers.add(subscriber);
-        subscriber.getSubscribedProjects().add(this);
-    }
-
-    public void removeSubscriber(Person subscriber) {
-        subscribers.remove(subscriber);
-        subscriber.getSubscribedProjects().remove(this);
-    }
-
-    public void setSubscribers(Set<Person> subscribers) {
+    public void setSubscribers(List<UUID> subscribers) {
         this.subscribers = subscribers;
     }
 
-    public Set<Contribution> getContributions() {
+    public List<UUID> getContributions() {
         return contributions;
     }
 
-    public void addContribution(Contribution contribution) {
-        contributions.add(contribution);
-        contribution.setProject(this);
-    }
-
-    public void removeContribution(Contribution contribution) {
-        contributions.remove(contribution);
-        contribution.setProject(null);
-    }
-
-    public void setContributions(Set<Contribution> contributions) {
+    public void setContributions(List<UUID> contributions) {
         this.contributions = contributions;
     }
 
-    public Set<Comment> getComments() {
+    public List<UUID> getComments() {
         return comments;
     }
 
-    public void addComment(Comment comment) {
-        comments.add(comment);
-        comment.setProject(this);
-    }
-
-    public void removeComment(Comment comment) {
-        comments.remove(comment);
-        comment.setProject(null);
-    }
-
-    public void setComments(Set<Comment> comments) {
+    public void setComments(List<UUID> comments) {
         this.comments = comments;
     }
 
-    public Set<Faq> getFaqs() {
+    public List<UUID> getFaqs() {
         return faqs;
     }
 
-    public void addFaq(Faq faq) {
-        faqs.add(faq);
-        faq.setProject(this);
-    }
-
-    public void removeFaq(Faq faq) {
-        faqs.remove(faq);
-        faq.setProject(null);
-    }
-
-    public void setFaqs(Set<Faq> faqs) {
+    public void setFaqs(List<UUID> faqs) {
         this.faqs = faqs;
     }
 
-    public Set<Category> getCategories() {
+    public List<UUID> getCategories() {
         return categories;
     }
 
-    public void addCategory(Category category) {
-        categories.add(category);
-        category.getProjects().add(this);
-    }
-
-    public void removeCategory(Category category) {
-        categories.remove(category);
-        category.getProjects().remove(this);
-    }
-
-    public void setCategories(Set<Category> categories) {
+    public void setCategories(List<UUID> categories) {
         this.categories = categories;
     }
 
-    public Set<Update> getUpdates() {
+    public List<UUID> getUpdates() {
         return updates;
     }
 
-    public void addUpdate(Update update) {
-        updates.add(update);
-        update.setProject(this);
-    }
-
-    public void removeUpdate(Update update) {
-        updates.remove(update);
-        update.setProject(null);
-    }
-
-    public void setUpdates(Set<Update> updates) {
+    public void setUpdates(List<UUID> updates) {
         this.updates = updates;
     }
 
-    public Set<Reward> getRewards() {
+    public List<UUID> getRewards() {
         return rewards;
     }
 
-    public void addReward(Reward reward) {
-        rewards.add(reward);
-        reward.setProject(this);
-    }
-
-    public void removeReward(Reward reward) {
-        rewards.remove(reward);
-        reward.setProject(null);
-    }
-
-    public void setRewards(Set<Reward> rewards) {
+    public void setRewards(List<UUID> rewards) {
         this.rewards = rewards;
     }
 
+//
+//    public int countProgress() {
+//        CurrencyUnit currency = fundingGoal.getCurrencyUnit();
+//        Money contributedSum = Money.zero(currency);
+//        for (Contribution contribution :
+//                contributions) {
+//            contributedSum = contributedSum.plus(contribution.getMoney());
+//        }
+//        int progress = 0;
+//        if (fundingGoal.isGreaterThan(Money.zero(currency))) {
+//            progress = contributedSum
+//                    .dividedBy(fundingGoal.getAmount(), RoundingMode.HALF_UP)
+//                    .getAmountMinorInt();
+//        }
+//        final int percent = 100;
+//        return progress * percent;
+//    }
 
-
-    public void countProgress()
-    {
-        CurrencyUnit currency = fundingGoal.getCurrencyUnit();
-        Money contributedSum = Money.zero(currency);
-        for (Contribution contribution:
-             contributions) {
-            if(contribution != null) {
-                if (contribution.getMoney() != null) {
-                    contributedSum = contributedSum.plus(contribution.getMoney());
-                }
-            }
-        }
-        int progress = contributedSum
-                .dividedBy(fundingGoal.getAmount(), RoundingMode.HALF_UP)
-                .getAmountMinorInt();
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Project)) {
-            return false;
-        }
-
-        Project project = (Project) o;
-        return Objects.equals(id, project.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }
+

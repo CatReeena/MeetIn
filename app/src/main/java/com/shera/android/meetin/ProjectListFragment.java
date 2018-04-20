@@ -107,15 +107,20 @@ public class ProjectListFragment extends Fragment {
         public void bindProject(Project project) {
             mProject = project;
             mProjectName.setText(mProject.getName());
-            if(mProject.getImageLinks() != null) {
-                if (mProject.getImageLinks().get(0) != null) {
+            if(mProject.getImageLinks()!= null) {
+                if (mProject.getImageLinks().isEmpty()== false) {
                     Picasso.with(getActivity())
                             .load(mProject.getImageLinks().get(0))
                             .into(mProjectImage);
                 }
             }
-            if(project.get)
 
+           // mFundingPercent.setText(String.valueOf(mProject.countProgress()));
+           // mFundingProgressBar.setProgress(mProject.countProgress());
+            if (mProject.getLocation()!=null) {
+                mProjectLocation.setText(mProject.getLocation().toString());
+            }
+            mProjectCategory.setText(mProject.getCategories().toString());
         }
 
         @Override

@@ -18,16 +18,19 @@ import java.util.List;
 
 public class ProjectFetch {
 
-    private static final Uri ENDPOINT = Uri
-            .parse("https://.....")
-            .buildUpon()
-            .appendQueryParameter("format", "json")
-            .build();
+    private static final Uri ENDPOINT = Uri.parse("http://192.168.1.93:8080/projects") ;
+    private static final String STARTER_PATH = "projects";
     private static final String TAG = "ProjectFetch";
 
     private String buildUrl(TaskFilters taskFilters) {
-        Uri.Builder uriBuilder = ENDPOINT.buildUpon()
-                .path(String.valueOf(taskFilters.getCategory()));
+        Uri.Builder uriBuilder = ENDPOINT.buildUpon();
+        if(taskFilters.getCategory()!= null)
+        {
+            uriBuilder.path(String.valueOf(taskFilters.getCategory()));
+        }
+//        else{
+//            uriBuilder.path(String.valueOf(STARTER_PATH));
+//        }
         if(taskFilters.getId() != null) {
             if(taskFilters.getProjectPosition() == TaskFilters.ProjectPosition.FIRST_PROJECT)
             {
@@ -67,14 +70,12 @@ public class ProjectFetch {
         try {
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-            Project[] projects = restTemplate.getForObject(url, Project[].class);
-            return Arrays.asList(projects);
+          
+            Page projects = restTemplate.getForObject(url, Page.class);
+            return projects.content;
         } catch (RestClientException e) {
             Log.e(TAG, e.getMessage(), e);
         }
         return null;
     }
-
-
-
 }

@@ -19,9 +19,8 @@ public class TaskFilters {
     private boolean mostFundedFilterOn = false;
     private boolean endDateFilterOn = false;
 
+    public TaskFilters(){
 
-    TaskFilters(Category category){
-        this.category = category;
     }
 
     public TaskFilters(UUID id,
