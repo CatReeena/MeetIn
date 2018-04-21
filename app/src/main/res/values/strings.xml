@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">MeetIn</string>
+    <string name="goal">Собрано: </string>
+    <string name="days_left">8 дней осталось</string>
 </resources>

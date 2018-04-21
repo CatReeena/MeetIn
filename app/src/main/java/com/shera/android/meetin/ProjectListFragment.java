@@ -1,11 +1,14 @@
 package com.shera.android.meetin;
 
 
+
+
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,6 +19,10 @@ import android.widget.TextView;
 
 import com.shera.android.meetin.entities.Project;
 import com.squareup.picasso.Picasso;
+
+import org.joda.time.DateTime;
+import org.joda.time.Duration;
+import org.joda.time.LocalDateTime;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -91,6 +98,8 @@ public class ProjectListFragment extends Fragment {
         private TextView mProjectLocation;
         private ImageButton mProjectSave;
         private Project mProject;
+        private TextView  mProjectGoal;
+        private TextView mProjectDaysLeft;
 
         public ProjectHolder(View itemView) {
             super(itemView);
@@ -101,6 +110,8 @@ public class ProjectListFragment extends Fragment {
             mProjectCategory = (TextView) itemView.findViewById(R.id.project_category);
             mProjectLocation = (TextView) itemView.findViewById(R.id.project_location);
             mProjectSave = (ImageButton)  itemView.findViewById(R.id.save_button);
+            mProjectGoal = (TextView) itemView.findViewById(R.id.funding_goal);
+            mProjectDaysLeft = (TextView) itemView.findViewById(R.id.days_left);
             itemView.setOnClickListener(this);
         }
 
@@ -115,8 +126,18 @@ public class ProjectListFragment extends Fragment {
                 }
             }
 
+            mProjectGoal.setText(getString(R.string.goal)+ " " + mProject.getFundingGoal().toString());
+            mFundingPercent.setText(String.valueOf(50)+ " %");
+            if(mProject.getEndDateTime()!= null) {
+                Duration duration = new Duration(DateTime.now(), mProject.getEndDateTime().toDateTime());
+                String days = String.valueOf(duration.getStandardDays());
+                mProjectDaysLeft.setText(days + getString(R.string.days_left));
+            }
+
            // mFundingPercent.setText(String.valueOf(mProject.countProgress()));
            // mFundingProgressBar.setProgress(mProject.countProgress());
+
+            mFundingProgressBar.setProgress(50);
             if (mProject.getLocation()!=null) {
                 mProjectLocation.setText(mProject.getLocation().toString());
             }
