@@ -18,7 +18,7 @@ import java.util.List;
 
 public class ProjectFetch {
 
-    private static final Uri ENDPOINT = Uri.parse("http://192.168.1.93:8080/projects") ;
+    private static final Uri ENDPOINT = Uri.parse("http://192.168.1.93:8080/") ;
     private static final String STARTER_PATH = "projects";
     private static final String TAG = "ProjectFetch";
 
@@ -28,9 +28,9 @@ public class ProjectFetch {
         {
             uriBuilder.path(String.valueOf(taskFilters.getCategory()));
         }
-//        else{
-//            uriBuilder.path(String.valueOf(STARTER_PATH));
-//        }
+        else{
+            uriBuilder.path(String.valueOf(STARTER_PATH));
+        }
         if(taskFilters.getId() != null) {
             if(taskFilters.getProjectPosition() == TaskFilters.ProjectPosition.FIRST_PROJECT)
             {

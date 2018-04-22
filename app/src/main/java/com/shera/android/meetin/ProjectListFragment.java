@@ -48,8 +48,7 @@ public class ProjectListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fetchItemsTask = new FetchItemsTask();
-        fetchItemsTask.execute(new TaskFilters()); //--------------IMPLEMENT PARAMS----------------------
+        addItems(TaskFilters.ProjectPosition.FRESH);
         setRetainInstance(true);
     }
 
@@ -64,8 +63,14 @@ public class ProjectListFragment extends Fragment {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (!recyclerView.canScrollVertically(1)) {
-                    if (fetchItemsTask.getStatus()== AsyncTask.Status.FINISHED) {   //add items
-                        //--------------IMPLEMENT----------------------
+                    if (fetchItemsTask.getStatus()== AsyncTask.Status.FINISHED) {
+                        addItems(TaskFilters.ProjectPosition.LAST_PROJECT);
+                    }
+                }
+                else if(!recyclerView.canScrollVertically(-1))
+                {
+                    if (fetchItemsTask.getStatus()== AsyncTask.Status.FINISHED) {
+                       addItems(TaskFilters.ProjectPosition.FIRST_PROJECT);
                     }
                 }
             }
@@ -74,17 +79,53 @@ public class ProjectListFragment extends Fragment {
         return v;
     }
 
+    public void addItems(TaskFilters.ProjectPosition projectPosition)
+    {
+        fetchItemsTask = new FetchItemsTask();
+        if(mProjectItems.isEmpty())
+        {
+            fetchItemsTask.execute(getFilters(TaskFilters.ProjectPosition.FRESH));
+        }
+        else {
+            fetchItemsTask.execute(
+                    getFilters(projectPosition));
+        }
+    }
+
     private void setupAdapter()
     {
         if (mAdapter == null) {
             mAdapter = new ProjectAdapter(mProjectItems);
             mProjectRecyclerView.setAdapter(mAdapter);
-        } else {
-            if (mProjectRecyclerView.getAdapter() == null) { //for after rotation
+        } else if  (mProjectRecyclerView.getAdapter() == null) { //for after rotation
                 mProjectRecyclerView.setAdapter(mAdapter);
             }
-            mAdapter.setGalleryItems(mProjectItems);  //update adapter (maybe separate method)
-            mAdapter.notifyDataSetChanged();
+    }
+
+    public TaskFilters getFilters(TaskFilters.ProjectPosition projectPosition)
+    {
+        switch (projectPosition) {
+            case LAST_PROJECT:
+                return new TaskFilters(mProjectItems.get(mProjectItems.size() - 1).getId(),
+                        TaskFilters.ProjectPosition.LAST_PROJECT,
+                        null,
+                        false,
+                        false,
+                        false,
+                        false,
+                        false,
+                        false);
+            case FIRST_PROJECT:
+                return new TaskFilters(mProjectItems.get(0).getId(),
+                        TaskFilters.ProjectPosition.FIRST_PROJECT,
+                        null,
+                        false,
+                        false,
+                        false,
+                        false,
+                        false,
+                        false);
+                default: return new TaskFilters(TaskFilters.ProjectPosition.FRESH);
         }
     }
 
@@ -125,6 +166,9 @@ public class ProjectListFragment extends Fragment {
                             .into(mProjectImage);
                 }
             }
+            Picasso.with(getActivity())
+                    .load("https://www.quebecoriginal.com/en/listing/images/800x600/75e8a9e6-ffc5-40d0-aa0e-eeb3518b92e2/august-festival-scene-principale.jpg")
+                    .into(mProjectImage);
 
             mProjectGoal.setText(getString(R.string.goal)+ " " + mProject.getFundingGoal().toString());
             mFundingPercent.setText(String.valueOf(50)+ " %");
@@ -133,7 +177,6 @@ public class ProjectListFragment extends Fragment {
                 String days = String.valueOf(duration.getStandardDays());
                 mProjectDaysLeft.setText(days + getString(R.string.days_left));
             }
-
            // mFundingPercent.setText(String.valueOf(mProject.countProgress()));
            // mFundingProgressBar.setProgress(mProject.countProgress());
 
@@ -179,33 +222,38 @@ public class ProjectListFragment extends Fragment {
 
     private class FetchItemsTask extends AsyncTask<TaskFilters,Void,List<Project>> {
 
+        private TaskFilters.ProjectPosition projectPosition;
+
         @Override
         protected List<Project> doInBackground(TaskFilters... params) {
+            projectPosition = params[0].getProjectPosition();
             return new ProjectFetch().downloadProjects(params[0]);
         }
 
         @Override
         protected void onPostExecute(List<Project> items) {
             if(items != null) {
-                mProjectItems.addAll(items);
-                setupAdapter();
+                switch (projectPosition)
+                {
+                    case FIRST_PROJECT:
+                        mProjectItems.addAll(0,items);
+                        mAdapter.notifyItemRangeInserted(0,items.size());
+                        break;
+                    case LAST_PROJECT:
+                        mProjectItems.addAll(items);
+                        mAdapter.setGalleryItems(mProjectItems);  //update adapter (maybe separate method)
+                        mAdapter.notifyDataSetChanged();
+                        break;
+                    case FRESH:
+                        mProjectItems = new ArrayList<>(items);
+                        mAdapter.setGalleryItems(mProjectItems);  //update adapter (maybe separate method)
+                        mAdapter.notifyDataSetChanged();
+                        break;
+                }
+
+
             }
         }
     }
-
-    private class FetchFreshItemsTask extends FetchItemsTask{
-
-        @Override
-        protected void onPostExecute(List<Project> items) {
-            if(items != null) {
-
-                mProjectItems.addAll(0,items);
-                setupAdapter();
-            }
-        }
-    }
-
-
-
 }
 

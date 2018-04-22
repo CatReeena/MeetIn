@@ -19,8 +19,8 @@ public class TaskFilters {
     private boolean mostFundedFilterOn = false;
     private boolean endDateFilterOn = false;
 
-    public TaskFilters(){
-
+    public TaskFilters(ProjectPosition projectPosition){
+        this.projectPosition = projectPosition;
     }
 
     public TaskFilters(UUID id,
@@ -116,7 +116,7 @@ public class TaskFilters {
     }
 
     public static enum ProjectPosition {
-        FIRST_PROJECT, LAST_PROJECT
+        FIRST_PROJECT, LAST_PROJECT, FRESH
     }
 
 }

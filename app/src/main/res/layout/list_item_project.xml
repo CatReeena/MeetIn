@@ -47,14 +47,14 @@
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/project_name"
+                style="@style/HeaderText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="@style/TextAppearance.AppCompat"
                 android:textSize="24sp"
-                style="@style/HeaderText"
+                app:fontFamily="@font/montserrat"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
-                app:layout_constraintRight_toLeftOf="@+id/save_button"
                 app:layout_constraintTop_toTopOf="parent" />
 
         </android.support.constraint.ConstraintLayout>
@@ -72,9 +72,8 @@
 
             <ImageView
                 android:id="@+id/project_image"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
                 android:scaleType="centerCrop"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
@@ -95,12 +94,13 @@
 
             <TextView
                 android:id="@+id/funding_goal"
+                style="@style/HeaderText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                style="@style/HeaderText"
+                android:fontFamily="@font/montserrat"
                 android:text="@string/goal"
                 app:layout_constraintBottom_toTopOf="@+id/funding_progress_bar"
                 app:layout_constraintLeft_toLeftOf="@+id/funding_progress_bar"
@@ -109,11 +109,12 @@
 
             <TextView
                 android:id="@+id/days_left"
+                style="@style/HeaderText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginTop="8dp"
-                style="@style/HeaderText"
+                android:fontFamily="@font/montserrat"
                 android:text="@string/days_left"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -124,6 +125,8 @@
                 android:layout_width="0dp"
                 android:layout_height="20dp"
                 android:layout_marginBottom="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintLeft_toLeftOf="parent"
                 app:layout_constraintRight_toRightOf="parent" />
