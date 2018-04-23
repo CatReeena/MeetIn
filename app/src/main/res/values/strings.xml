@@ -2,4 +2,8 @@
     <string name="app_name">MeetIn</string>
     <string name="goal">Собрано: </string>
     <string name="days_left">8 дней осталось</string>
+    <string name="comments">Комментарии</string>
+    <string name="video">Видео</string>
+    <string name="updates">Обновления</string>
+    <string name="rewards">Вознаграждения</string>
 </resources>
