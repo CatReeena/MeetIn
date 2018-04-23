@@ -9,9 +9,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.shera.android.meetin.entities.Project;
 import com.shera.android.meetin.entities.Reward;
+import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -22,6 +26,8 @@ public class ProjectFragment extends Fragment {
     private RecyclerView mRewardRecyclerView;
     private RewardAdapter mAdapter;
     private List<Reward> mRewardItems = new ArrayList<>();
+    ImageView mProjectImageView;
+    TextView mProjectName;
 
     public static ProjectFragment newInstance(UUID projectId) {
         Bundle args = new Bundle();
@@ -43,6 +49,8 @@ public class ProjectFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_project, container, false);
+        mProjectImageView =  v.findViewById(R.id.project_image_detailed);
+        mProjectName = v.findViewById(R.id.project_name_detailed);
         mRewardRecyclerView = (RecyclerView) v.findViewById(R.id.reward_recycler_view);
         mRewardRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRewardRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -55,6 +63,11 @@ public class ProjectFragment extends Fragment {
                 }
             }
         });
+        // --------------------------------------AMEND--------------------------------------
+        mProjectName.setText("Testing out");
+        Picasso.with(getActivity())
+                .load("https://www.quebecoriginal.com/en/listing/images/800x600/75e8a9e6-ffc5-40d0-aa0e-eeb3518b92e2/august-festival-scene-principale.jpg")
+                .into(mProjectImageView);
         setupAdapter();
         return v;
     }
