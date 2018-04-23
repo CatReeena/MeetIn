@@ -6,4 +6,7 @@
     <string name="video">Видео</string>
     <string name="updates">Обновления</string>
     <string name="rewards">Вознаграждения</string>
+    <string name="reward">Вознаграждение:</string>
+    <string name="delivery_date">Время доставки:</string>
+    <string name="sipment">Доставка</string>
 </resources>

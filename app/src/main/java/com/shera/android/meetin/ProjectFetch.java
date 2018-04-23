@@ -11,6 +11,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * Created by Shera on 17.04.2018.
@@ -18,27 +19,22 @@ import java.util.List;
 
 public class ProjectFetch {
 
-    private static final Uri ENDPOINT = Uri.parse("http://192.168.1.93:8080/") ;
+    private static final Uri ENDPOINT = Uri.parse("http://192.168.1.93:8080/");
     private static final String STARTER_PATH = "projects";
     private static final String TAG = "ProjectFetch";
 
     private String buildUrl(TaskFilters taskFilters) {
         Uri.Builder uriBuilder = ENDPOINT.buildUpon();
-        if(taskFilters.getCategory()!= null)
-        {
+        if (taskFilters.getCategory() != null) {
             uriBuilder.path(String.valueOf(taskFilters.getCategory()));
-        }
-        else{
+        } else {
             uriBuilder.path(String.valueOf(STARTER_PATH));
         }
-        if(taskFilters.getId() != null) {
-            if(taskFilters.getProjectPosition() == TaskFilters.ProjectPosition.FIRST_PROJECT)
-            {
+        if (taskFilters.getId() != null) {
+            if (taskFilters.getProjectPosition() == TaskFilters.ProjectPosition.FIRST_PROJECT) {
                 uriBuilder.appendQueryParameter("firstProjectId",
                         String.valueOf(taskFilters.getId()));
-            }
-            else
-            {
+            } else {
                 uriBuilder.appendQueryParameter("lastProjectId",
                         String.valueOf(taskFilters.getId()));
             }
@@ -64,18 +60,23 @@ public class ProjectFetch {
         return uriBuilder.build().toString();
     }
 
-    public List<Project> downloadProjects(TaskFilters taskFilters)
-    {
+    public List<Project> downloadProjects(TaskFilters taskFilters) {
         String url = buildUrl(taskFilters);
         try {
             RestTemplate restTemplate = new RestTemplate();
             restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
-          
+
             Page projects = restTemplate.getForObject(url, Page.class);
             return projects.content;
         } catch (RestClientException e) {
             Log.e(TAG, e.getMessage(), e);
         }
         return null;
+    }
+
+    public Project downloadProjectById(UUID id)
+    {
+       // ---------------------------------------------------IMPLEMENT--------------------------------
+        return new Project();
     }
 }

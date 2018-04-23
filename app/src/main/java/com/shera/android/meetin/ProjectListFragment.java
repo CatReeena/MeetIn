@@ -3,6 +3,7 @@ package com.shera.android.meetin;
 
 
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -38,7 +39,6 @@ public class ProjectListFragment extends Fragment {
     private RecyclerView mProjectRecyclerView;
     private ProjectAdapter mAdapter;
     private List<Project> mProjectItems = new ArrayList<>();
-    private int currentPage = 1;
     private FetchItemsTask fetchItemsTask;
 
     public static ProjectListFragment newInstance() {
@@ -189,7 +189,8 @@ public class ProjectListFragment extends Fragment {
 
         @Override
         public void onClick(View v) {
-            //--------------IMPLEMENT----------------------
+            Intent intent = ProjectActivity.newIntent(getActivity(), mProject.getId());
+            startActivity(intent);
         }
     }
 
