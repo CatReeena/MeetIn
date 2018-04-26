@@ -77,8 +77,6 @@ public class ProjectFetch {
             ObjectMapper objectMapper = new ObjectMapper();
             objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
             objectMapper.registerModule(new JodaModule());
-          //  objectMapper.setDateFormat(new ISO8601DateFormat());
-          //  objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
 
             SimpleModule module = new SimpleModule();
             module.addDeserializer(Money.class, new JodaMoneyDeserializer());
@@ -89,9 +87,6 @@ public class ProjectFetch {
             List<HttpMessageConverter<?>> converters = new ArrayList<>();
             converters.add(converter);
             restTemplate.setMessageConverters(converters);
-
-
-//            restTemplate.getMessageConverters().add(converter);
 
             Page projects = restTemplate.getForObject(url, Page.class);
             return projects.content;

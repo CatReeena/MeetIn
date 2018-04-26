@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <plurals name="days_left">
+        <item quantity="one">%1$d день остался</item>
+        <item quantity="few">%1$d дня осталось</item>
+        <item quantity="many">%1$d дней осталось</item>
+        <item quantity="other">%1$d дней осталось</item>
+    </plurals>
+</resources>

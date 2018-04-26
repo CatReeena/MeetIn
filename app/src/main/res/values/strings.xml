@@ -1,11 +1,23 @@
 <resources>
     <string name="app_name">MeetIn</string>
-    <string name="goal">Собрано: </string>
-    <string name="days_left">8 дней осталось</string>
+    <string name="raised_money">Собрано: %1$s</string>
+    <string name="funding_percent">%1$d %%</string>
+
+    <plurals name="days_left">
+        <item quantity="one">>%d день остался</item>
+        <item quantity="few">%d дня осталось</item>
+        <item quantity="many">%d дней осталось</item>
+        <item quantity="other">%d дней осталось</item>
+    </plurals>
+
     <string name="comments">Комментарии</string>
     <string name="video">Видео</string>
     <string name="updates">Обновления</string>
     <string name="reward">Взносы:</string>
     <string name="delivery_date">Время доставки:</string>
     <string name="sipment">Доставка</string>
+    <string name="service_not_available">Сервис недоступен</string>
+    <string name="invalid_lat_long_used">Неверно задана локация</string>
+    <string name="no_address_found">Адрес не найден</string>
+    <string name="address_found">Адрес найден</string>
 </resources>

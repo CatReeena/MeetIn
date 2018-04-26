@@ -3,9 +3,12 @@ package com.shera.android.meetin.entities;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+
+import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import org.joda.time.LocalDateTime;
 
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -193,6 +196,20 @@ public class Project {
 
     public void setRewards(List<Reward> rewards) {
         this.rewards = rewards;
+    }
+
+    public int getProgressPercent() {
+        int progress = 0;
+        final int percent = 100;
+        if (fundingGoal != null && raisedMoney != null) {
+            CurrencyUnit currency = fundingGoal.getCurrencyUnit();
+            if (fundingGoal.isGreaterThan(Money.zero(currency))) {
+                progress = raisedMoney
+                        .dividedBy(fundingGoal.getAmount(), RoundingMode.HALF_UP)
+                        .getAmountMinorInt();
+            }
+        }
+        return progress * percent;
     }
 }
 

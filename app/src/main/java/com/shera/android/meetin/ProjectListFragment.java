@@ -4,9 +4,12 @@ package com.shera.android.meetin;
 
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.os.ResultReceiver;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
@@ -18,23 +21,31 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.shera.android.meetin.entities.Location;
 import com.shera.android.meetin.entities.Project;
 import com.squareup.picasso.Picasso;
 
 import org.joda.time.DateTime;
 import org.joda.time.Duration;
-import org.joda.time.LocalDateTime;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import java.util.UUID;
 
 /**
  * Created by Shera on 17.04.2018.
  */
 
 public class ProjectListFragment extends Fragment {
+
+    public static final int SUCCESS_RESULT = 0;
+    public static final int FAILURE_RESULT = 1;
+    public static final String PACKAGE_NAME =
+            "com.shera.android.meetin";
+    public static final String RECEIVER = PACKAGE_NAME + ".RECEIVER";
+    public static final String RESULT_DATA_KEY = PACKAGE_NAME +
+            ".RESULT_DATA_KEY";
+    public static final String LOCATION_DATA_EXTRA = PACKAGE_NAME +
+            ".LOCATION_DATA_EXTRA";
 
     private RecyclerView mProjectRecyclerView;
     private ProjectAdapter mAdapter;
@@ -131,6 +142,7 @@ public class ProjectListFragment extends Fragment {
 
     private class ProjectHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
+        private AddressResultReceiver mResultReceiver = new AddressResultReceiver(new Handler());
         private ImageView mProjectImage;
         private TextView mProjectName;
         private TextView mFundingPercent;
@@ -139,30 +151,30 @@ public class ProjectListFragment extends Fragment {
         private TextView mProjectLocation;
         private ImageButton mProjectSave;
         private Project mProject;
-        private TextView  mProjectGoal;
+        private TextView mProjectRaisedMoney;
         private TextView mProjectDaysLeft;
 
         public ProjectHolder(View itemView) {
             super(itemView);
-            mProjectImage = (ImageView) itemView.findViewById(R.id.project_image);
-            mProjectName = (TextView) itemView.findViewById(R.id.project_name);
-            mFundingPercent = (TextView) itemView.findViewById(R.id.funding_percent);
-            mFundingProgressBar = (ProgressBar) itemView.findViewById(R.id.funding_progress_bar);
-            mProjectCategory = (TextView) itemView.findViewById(R.id.project_category);
-            mProjectLocation = (TextView) itemView.findViewById(R.id.project_location);
-            mProjectSave = (ImageButton)  itemView.findViewById(R.id.save_button);
-            mProjectGoal = (TextView) itemView.findViewById(R.id.funding_goal);
-            mProjectDaysLeft = (TextView) itemView.findViewById(R.id.days_left);
+            mProjectImage = itemView.findViewById(R.id.project_image);
+            mProjectName = itemView.findViewById(R.id.project_name);
+            mFundingPercent = itemView.findViewById(R.id.funding_percent);
+            mFundingProgressBar = itemView.findViewById(R.id.funding_progress_bar);
+            mProjectCategory = itemView.findViewById(R.id.project_category);
+            mProjectLocation = itemView.findViewById(R.id.project_location);
+            mProjectSave = itemView.findViewById(R.id.save_button);
+            mProjectRaisedMoney = itemView.findViewById(R.id.raised_money);
+            mProjectDaysLeft = itemView.findViewById(R.id.days_left);
             itemView.setOnClickListener(this);
         }
 
         public void bindProject(Project project) {
             mProject = project;
             mProjectName.setText(mProject.getName());
-            if(mProject.getImageLinks()!= null) {
-                if (mProject.getImageLinks().isEmpty()== false) {
+            if(mProject.getProjectImageLink()!= null) {
+                {
                     Picasso.with(getActivity())
-                            .load(mProject.getImageLinks().get(0))
+                            .load(mProject.getProjectImageLink())
                             .into(mProjectImage);
                 }
             }
@@ -170,27 +182,68 @@ public class ProjectListFragment extends Fragment {
                     .load("https://www.quebecoriginal.com/en/listing/images/800x600/75e8a9e6-ffc5-40d0-aa0e-eeb3518b92e2/august-festival-scene-principale.jpg")
                     .into(mProjectImage);
 
-            mProjectGoal.setText(getString(R.string.goal)+ " " + mProject.getFundingGoal().toString());
-            mFundingPercent.setText(String.valueOf(50)+ " %");
+            mProjectRaisedMoney.setText(getString(R.string.raised_money, mProject.getFundingGoal().toString()));
+            mFundingPercent.setText(getString(R.string.funding_percent, mProject.getProgressPercent()));
             if(mProject.getEndDateTime()!= null) {
                 Duration duration = new Duration(DateTime.now(), mProject.getEndDateTime().toDateTime());
-                String days = String.valueOf(duration.getStandardDays());
-                mProjectDaysLeft.setText(days + getString(R.string.days_left));
+                int days = (int) duration.getStandardDays(); //---------------------NOT_SURE_ABOUT_THIS---------------------------------------
+                Resources res = getResources();
+                if(days > 0) {
+                    mProjectDaysLeft.setText(res.getQuantityString(R.plurals.days_left, days, days));
+                }
+                else{
+                    mProjectDaysLeft.setText(res.getQuantityString(R.plurals.days_left, 0, 0));
+                }
             }
-//            mFundingPercent.setText(String.valueOf(mProject.countProgress()));
-//            mFundingProgressBar.setProgress(mProject.countProgress());
-
-            mFundingProgressBar.setProgress(50);
+            mFundingProgressBar.setProgress(mProject.getProgressPercent());
             if (mProject.getLocation()!=null) {
                 mProjectLocation.setText(mProject.getLocation().toString());
             }
             mProjectCategory.setText(mProject.getCategories().toString());
+
+            startIntentService();
+        }
+
+        protected void startIntentService() {
+            Intent intent = new Intent(getActivity(), FetchAddressIntentService.class);
+            intent.putExtra(RECEIVER, mResultReceiver);
+            //intent.putExtra(LOCATION_DATA_EXTRA, mProject.getLocation());
+
+            Location l = new Location();
+                 l.setLatitude(40.730610);
+                 l.setLongitude(-73.935242);
+            intent.putExtra(LOCATION_DATA_EXTRA, l);
+            getActivity().startService(intent);
         }
 
         @Override
         public void onClick(View v) {
             Intent intent = ProjectActivity.newIntent(getActivity(), mProject.getId());
             startActivity(intent);
+        }
+
+
+        class AddressResultReceiver extends ResultReceiver {
+            public AddressResultReceiver(Handler handler) {
+                super(handler);
+            }
+
+            @Override
+            protected void onReceiveResult(int resultCode, Bundle resultData) {
+
+                if (resultData == null) {
+                    return;
+                }
+
+                // Display the address string
+                // or an error message sent from the intent service.
+                String mAddressOutput = resultData.getString(RESULT_DATA_KEY);
+
+                if (resultCode == SUCCESS_RESULT) {
+                    mProjectLocation.setText(mAddressOutput);
+                }
+
+            }
         }
     }
 
@@ -256,5 +309,7 @@ public class ProjectListFragment extends Fragment {
             }
         }
     }
+
+
 }
 
