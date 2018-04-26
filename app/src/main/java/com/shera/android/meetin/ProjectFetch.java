@@ -3,12 +3,22 @@ package com.shera.android.meetin;
 import android.net.Uri;
 import android.util.Log;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.module.SimpleModule;
+import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
+import com.fasterxml.jackson.datatype.joda.JodaModule;
 import com.shera.android.meetin.entities.Project;
 
+import org.joda.money.Money;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
@@ -20,7 +30,7 @@ import java.util.UUID;
 public class ProjectFetch {
 
     private static final Uri ENDPOINT = Uri.parse("http://192.168.1.93:8080/");
-    private static final String STARTER_PATH = "projects";
+    private static final String STARTER_PATH = "v0/projects";
     private static final String TAG = "ProjectFetch";
 
     private String buildUrl(TaskFilters taskFilters) {
@@ -64,7 +74,24 @@ public class ProjectFetch {
         String url = buildUrl(taskFilters);
         try {
             RestTemplate restTemplate = new RestTemplate();
-            restTemplate.getMessageConverters().add(new MappingJackson2HttpMessageConverter());
+            ObjectMapper objectMapper = new ObjectMapper();
+            objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+            objectMapper.registerModule(new JodaModule());
+          //  objectMapper.setDateFormat(new ISO8601DateFormat());
+          //  objectMapper.disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS);
+
+            SimpleModule module = new SimpleModule();
+            module.addDeserializer(Money.class, new JodaMoneyDeserializer());
+            objectMapper.registerModule(module);
+
+            MappingJackson2HttpMessageConverter converter = new MappingJackson2HttpMessageConverter();
+            converter.setObjectMapper(objectMapper);
+            List<HttpMessageConverter<?>> converters = new ArrayList<>();
+            converters.add(converter);
+            restTemplate.setMessageConverters(converters);
+
+
+//            restTemplate.getMessageConverters().add(converter);
 
             Page projects = restTemplate.getForObject(url, Page.class);
             return projects.content;

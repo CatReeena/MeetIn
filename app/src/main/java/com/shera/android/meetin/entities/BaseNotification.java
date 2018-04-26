@@ -1,13 +1,11 @@
 package com.shera.android.meetin.entities;
 
-import org.threeten.bp.LocalDateTime;
+import org.joda.time.LocalDateTime;
 
-import java.util.Objects;
-import java.util.UUID;
 
 public class BaseNotification {
 
-    private UUID id;
+    private Long id;
     private LocalDateTime dateTime;
     private String message;
     private Project project;
@@ -27,7 +25,6 @@ public class BaseNotification {
         this.receiver = receiver;
         this.dateTime = dateTime;
         this.project = project;
-        this.id = UUID.randomUUID();
     }
 
     protected BaseNotification() {
@@ -42,11 +39,11 @@ public class BaseNotification {
         this.message = message;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -74,21 +71,4 @@ public class BaseNotification {
         this.receiver = receiver;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof BaseNotification)) {
-            return false;
-        }
-
-        BaseNotification that = (BaseNotification) o;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
-    }
 }

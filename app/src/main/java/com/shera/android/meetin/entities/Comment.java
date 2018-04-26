@@ -1,46 +1,21 @@
 package com.shera.android.meetin.entities;
 
 
-import org.threeten.bp.LocalDateTime;
-
-import java.util.Objects;
-import java.util.UUID;
-
-
+import org.joda.time.LocalDateTime;
 
 public class Comment {
 
-    private UUID id;
+    private Long id;
     private Project project;
     private Person author;
     private String message;
     private LocalDateTime dateTime;
 
-    /**
-     * Constructs new comment to the project.
-     *
-     * @param project project to which comment belongs
-     * @param author person who wrote comment
-     * @param message message
-     * @param dateTime creation date and time
-     */
-    public Comment(Project project, Person author, String message, LocalDateTime dateTime) {
-        this.project = project;
-        this.author = author;
-        this.message = message;
-        this.dateTime = dateTime;
-        this.id = UUID.randomUUID();
-    }
-
-    protected Comment() {
-
-    }
-
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -74,23 +49,5 @@ public class Comment {
 
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Comment)) {
-            return false;
-        }
-
-        Comment comment = (Comment) o;
-        return Objects.equals(id, comment.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 }

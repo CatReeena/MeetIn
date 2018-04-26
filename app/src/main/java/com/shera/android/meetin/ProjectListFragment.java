@@ -177,8 +177,8 @@ public class ProjectListFragment extends Fragment {
                 String days = String.valueOf(duration.getStandardDays());
                 mProjectDaysLeft.setText(days + getString(R.string.days_left));
             }
-           // mFundingPercent.setText(String.valueOf(mProject.countProgress()));
-           // mFundingProgressBar.setProgress(mProject.countProgress());
+//            mFundingPercent.setText(String.valueOf(mProject.countProgress()));
+//            mFundingProgressBar.setProgress(mProject.countProgress());
 
             mFundingProgressBar.setProgress(50);
             if (mProject.getLocation()!=null) {

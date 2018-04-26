@@ -2,45 +2,23 @@ package com.shera.android.meetin.entities;
 
 
 import org.joda.money.Money;
-import org.threeten.bp.LocalDateTime;
-
-import java.util.Objects;
-import java.util.UUID;
+import org.joda.time.LocalDateTime;
 
 
 public class Contribution {
 
-    private UUID id;
+    private Long id;
     private Person contributor;
     private Project project;
     private LocalDateTime dateTime;
     private Money money;
     private Reward reward;
 
-    /**
-     * Constructs new contribution to the project.
-     *
-     * @param contributor person who made the contribution
-     * @param project project to which the contribution was made
-     * @param dateTime creation date and time
-     * @param money contributed currency and amount
-     * @param reward reward for this contribution
-     */
-    public Contribution(Person contributor, Project project, LocalDateTime dateTime,
-                        Money money, Reward reward) {
-        this.contributor = contributor;
-        this.project = project;
-        this.dateTime = dateTime;
-        this.money = money;
-        this.reward = reward;
-        this.id = UUID.randomUUID();
-    }
-
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -82,23 +60,5 @@ public class Contribution {
 
     public void setReward(Reward reward) {
         this.reward = reward;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) {
-            return true;
-        }
-        if (!(o instanceof Contribution)) {
-            return false;
-        }
-
-        Contribution that = (Contribution) o;
-        return Objects.equals(id, that.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 }

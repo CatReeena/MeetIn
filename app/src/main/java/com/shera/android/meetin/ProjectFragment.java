@@ -29,7 +29,7 @@ public class ProjectFragment extends Fragment {
     ImageView mProjectImageView;
     TextView mProjectName;
 
-    public static ProjectFragment newInstance(UUID projectId) {
+    public static ProjectFragment newInstance(Long projectId) {
         Bundle args = new Bundle();
         args.putSerializable(ARG_PROJECT_ID, projectId);
         ProjectFragment fragment = new ProjectFragment();
@@ -40,7 +40,7 @@ public class ProjectFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        UUID crimeId = (UUID) getArguments().getSerializable(ARG_PROJECT_ID);
+        Long crimeId = (Long) getArguments().getSerializable(ARG_PROJECT_ID);
         // --------------------------------------QUESTIONABLE--------------------------------------
         setRetainInstance(true);
     }

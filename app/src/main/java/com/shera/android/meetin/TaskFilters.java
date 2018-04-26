@@ -9,7 +9,7 @@ import java.util.UUID;
  */
 
 public class TaskFilters {
-    private UUID id;
+    private Long id;
     ProjectPosition projectPosition;
     private Category category;
     private boolean followedFilterOn = false;
@@ -23,7 +23,7 @@ public class TaskFilters {
         this.projectPosition = projectPosition;
     }
 
-    public TaskFilters(UUID id,
+    public TaskFilters(Long id,
                        ProjectPosition projectPosition,
                        Category category,
                        boolean followedFilterOn,
@@ -43,11 +43,11 @@ public class TaskFilters {
         this.endDateFilterOn = endDateFilterOn;
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

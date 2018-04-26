@@ -10,14 +10,14 @@ public class ProjectActivity extends SingleFragmentActivity {
     public static final String EXTRA_PROJECT_ID =
             "com.shera.android.meetin.project_id";
 
-    public static Intent newIntent(Context context, UUID projectId) {
+    public static Intent newIntent(Context context, Long projectId) {
         Intent intent = new Intent(context, ProjectActivity.class);
         intent.putExtra(EXTRA_PROJECT_ID, projectId);
         return intent;
     }
     @Override
     protected Fragment createFragment() {
-        UUID projectId = (UUID) getIntent()
+        Long projectId = (Long) getIntent()
                 .getSerializableExtra(EXTRA_PROJECT_ID);
         return ProjectFragment.newInstance(projectId);
     }

@@ -1,49 +1,53 @@
 
 package com.shera.android.meetin.entities;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.shera.android.meetin.JodaMoneyDeserializer;
 
-import org.joda.money.CurrencyUnit;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.joda.money.Money;
 import org.joda.time.LocalDateTime;
 
-import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
+
 
 public class Project {
-    private UUID id;
+
+    private Long id;
     private String name;
     private String description;
     private Location location;
+    @JsonProperty("starts")
     private LocalDateTime startDateTime;
+    @JsonProperty("ends")
     private LocalDateTime endDateTime;
-    @JsonDeserialize(using= JodaMoneyDeserializer.class)
+    @JsonProperty("funding_goal")
     private Money fundingGoal;
-
+    @JsonProperty("raised")
+    private Money raisedMoney;
+    @JsonProperty("project_image")
+    private String projectImageLink;
+    @JsonProperty("gallery_videos")
     private List<String> videoLinks = new ArrayList<>();
+    @JsonProperty("gallery_images")
     private List<String> imageLinks = new ArrayList<>();
-
-    private List<UUID> owners = new ArrayList<>();
-    private List<UUID> subscribers = new ArrayList<>();
-    private List<UUID> contributions = new ArrayList<>();
-    private List<UUID> comments = new ArrayList<>();
-    private List<UUID> faqs = new ArrayList<>();
-    private List<UUID> categories = new ArrayList<>();
-    private List<UUID> updates = new ArrayList<>();
-    private List<UUID> rewards = new ArrayList<>();
+    private List<Person> owners = new ArrayList<>();
+    private List<Person> subscribers = new ArrayList<>();
+    private List<Contribution> contributions = new ArrayList<>();
+    private List<Comment> comments = new ArrayList<>();
+    private List<Faq> faqs = new ArrayList<>();
+    private List<Category> categories = new ArrayList<>();
+    private List<Update> updates = new ArrayList<>();
+    private List<Reward> rewards = new ArrayList<>();
 
     public Project() {
 
     }
 
-    public UUID getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -95,6 +99,22 @@ public class Project {
         this.fundingGoal = fundingGoal;
     }
 
+    public Money getRaisedMoney() {
+        return raisedMoney;
+    }
+
+    public void setRaisedMoney(Money raisedMoney) {
+        this.raisedMoney = raisedMoney;
+    }
+
+    public String getProjectImageLink() {
+        return projectImageLink;
+    }
+
+    public void setProjectImageLink(String projectImageLink) {
+        this.projectImageLink = projectImageLink;
+    }
+
     public List<String> getVideoLinks() {
         return videoLinks;
     }
@@ -111,87 +131,68 @@ public class Project {
         this.imageLinks = imageLinks;
     }
 
-    public List<UUID> getOwners() {
+    public List<Person> getOwners() {
         return owners;
     }
 
-    public void setOwners(List<UUID> owners) {
+    public void setOwners(List<Person> owners) {
         this.owners = owners;
     }
 
-    public List<UUID> getSubscribers() {
+    public List<Person> getSubscribers() {
         return subscribers;
     }
 
-    public void setSubscribers(List<UUID> subscribers) {
+    public void setSubscribers(List<Person> subscribers) {
         this.subscribers = subscribers;
     }
 
-    public List<UUID> getContributions() {
+    public List<Contribution> getContributions() {
         return contributions;
     }
 
-    public void setContributions(List<UUID> contributions) {
+    public void setContributions(List<Contribution> contributions) {
         this.contributions = contributions;
     }
 
-    public List<UUID> getComments() {
+    public List<Comment> getComments() {
         return comments;
     }
 
-    public void setComments(List<UUID> comments) {
+    public void setComments(List<Comment> comments) {
         this.comments = comments;
     }
 
-    public List<UUID> getFaqs() {
+    public List<Faq> getFaqs() {
         return faqs;
     }
 
-    public void setFaqs(List<UUID> faqs) {
+    public void setFaqs(List<Faq> faqs) {
         this.faqs = faqs;
     }
 
-    public List<UUID> getCategories() {
+    public List<Category> getCategories() {
         return categories;
     }
 
-    public void setCategories(List<UUID> categories) {
+    public void setCategories(List<Category> categories) {
         this.categories = categories;
     }
 
-    public List<UUID> getUpdates() {
+    public List<Update> getUpdates() {
         return updates;
     }
 
-    public void setUpdates(List<UUID> updates) {
+    public void setUpdates(List<Update> updates) {
         this.updates = updates;
     }
 
-    public List<UUID> getRewards() {
+    public List<Reward> getRewards() {
         return rewards;
     }
 
-    public void setRewards(List<UUID> rewards) {
+    public void setRewards(List<Reward> rewards) {
         this.rewards = rewards;
     }
-
-//
-//    public int countProgress() {
-//        CurrencyUnit currency = fundingGoal.getCurrencyUnit();
-//        Money contributedSum = Money.zero(currency);
-//        for (Contribution contribution :
-//                contributions) {
-//            contributedSum = contributedSum.plus(contribution.getMoney());
-//        }
-//        int progress = 0;
-//        if (fundingGoal.isGreaterThan(Money.zero(currency))) {
-//            progress = contributedSum
-//                    .dividedBy(fundingGoal.getAmount(), RoundingMode.HALF_UP)
-//                    .getAmountMinorInt();
-//        }
-//        final int percent = 100;
-//        return progress * percent;
-//    }
-
 }
 
