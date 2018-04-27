@@ -5,7 +5,7 @@ import android.content.Intent;
 import android.support.v4.app.Fragment;
 import java.util.UUID;
 
-public class ProjectActivity extends SingleFragmentActivity {
+public class ProjectActivity extends SingleFragmentActivity implements ProjectFragment.Callbacks {
 
     public static final String EXTRA_PROJECT_ID =
             "com.shera.android.meetin.project_id";
@@ -20,6 +20,11 @@ public class ProjectActivity extends SingleFragmentActivity {
         Long projectId = (Long) getIntent()
                 .getSerializableExtra(EXTRA_PROJECT_ID);
         return ProjectFragment.newInstance(projectId);
+    }
+
+    @Override
+    public void onUnexistingProjectBehavior() {
+        finish();
     }
 }
 

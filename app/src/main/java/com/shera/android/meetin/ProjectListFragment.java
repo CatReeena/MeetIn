@@ -3,8 +3,10 @@ package com.shera.android.meetin;
 
 
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.location.Address;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -171,7 +173,7 @@ public class ProjectListFragment extends Fragment {
         public void bindProject(Project project) {
             mProject = project;
             mProjectName.setText(mProject.getName());
-            if(mProject.getProjectImageLink()!= null) {
+            if (mProject.getProjectImageLink()!= null) {
                 {
                     Picasso.with(getActivity())
                             .load(mProject.getProjectImageLink())
@@ -184,7 +186,7 @@ public class ProjectListFragment extends Fragment {
 
             mProjectRaisedMoney.setText(getString(R.string.raised_money, mProject.getFundingGoal().toString()));
             mFundingPercent.setText(getString(R.string.funding_percent, mProject.getProgressPercent()));
-            if(mProject.getEndDateTime()!= null) {
+            if (mProject.getEndDateTime()!= null) {
                 Duration duration = new Duration(DateTime.now(), mProject.getEndDateTime().toDateTime());
                 int days = (int) duration.getStandardDays(); //---------------------NOT_SURE_ABOUT_THIS---------------------------------------
                 Resources res = getResources();
@@ -196,23 +198,20 @@ public class ProjectListFragment extends Fragment {
                 }
             }
             mFundingProgressBar.setProgress(mProject.getProgressPercent());
-            if (mProject.getLocation()!=null) {
-                mProjectLocation.setText(mProject.getLocation().toString());
-            }
-            mProjectCategory.setText(mProject.getCategories().toString());
 
-            startIntentService();
+            if (!mProject.getCategories().isEmpty()) {
+                mProjectCategory.setText(mProject.getCategories().toString());
+            }
+
+            if (mProject.getLocation()!= null){
+                startIntentService();
+            }
         }
 
         protected void startIntentService() {
             Intent intent = new Intent(getActivity(), FetchAddressIntentService.class);
             intent.putExtra(RECEIVER, mResultReceiver);
-            //intent.putExtra(LOCATION_DATA_EXTRA, mProject.getLocation());
-
-            Location l = new Location();
-                 l.setLatitude(40.730610);
-                 l.setLongitude(-73.935242);
-            intent.putExtra(LOCATION_DATA_EXTRA, l);
+            intent.putExtra(LOCATION_DATA_EXTRA, mProject.getLocation());
             getActivity().startService(intent);
         }
 
@@ -224,6 +223,7 @@ public class ProjectListFragment extends Fragment {
 
 
         class AddressResultReceiver extends ResultReceiver {
+            @SuppressLint("RestrictedApi")
             public AddressResultReceiver(Handler handler) {
                 super(handler);
             }
@@ -235,14 +235,14 @@ public class ProjectListFragment extends Fragment {
                     return;
                 }
 
-                // Display the address string
-                // or an error message sent from the intent service.
-                String mAddressOutput = resultData.getString(RESULT_DATA_KEY);
-
                 if (resultCode == SUCCESS_RESULT) {
-                    mProjectLocation.setText(mAddressOutput);
+                    Address mAddressOutput = resultData.getParcelable(RESULT_DATA_KEY);
+                    if(mAddressOutput.getLocality() != null) {
+                        mProjectLocation.setText(mAddressOutput.getLocality());
+                    }else if(mAddressOutput.getAdminArea() != null){
+                        mProjectLocation.setText(mAddressOutput.getAdminArea());
+                    }
                 }
-
             }
         }
     }

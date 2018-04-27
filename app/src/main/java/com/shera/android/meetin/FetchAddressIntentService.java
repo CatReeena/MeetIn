@@ -32,6 +32,7 @@ public class FetchAddressIntentService extends IntentService {
             ".RESULT_DATA_KEY";
     public static final String LOCATION_DATA_EXTRA = PACKAGE_NAME +
             ".LOCATION_DATA_EXTRA";
+    public static final String ADDRESS = "ADDRESS";
 
     protected ResultReceiver mReceiver;
 
@@ -40,7 +41,7 @@ public class FetchAddressIntentService extends IntentService {
     }
 
     @Override
-    protected void onHandleIntent(@Nullable Intent intent) {
+    protected void onHandleIntent(Intent intent) {
         Geocoder geocoder = new Geocoder(this, Locale.getDefault());
 
         if (intent == null) {
@@ -52,6 +53,7 @@ public class FetchAddressIntentService extends IntentService {
         mReceiver = intent.getParcelableExtra(RECEIVER);
 
         List<Address> addresses = null;
+        Bundle data = new Bundle();
 
         try {
             addresses = geocoder.getFromLocation(
@@ -77,28 +79,14 @@ public class FetchAddressIntentService extends IntentService {
                 errorMessage = getString(R.string.no_address_found);
                 Log.e(TAG, errorMessage);
             }
-            deliverResultToReceiver(FAILURE_RESULT, errorMessage);
+            data.putString(RESULT_DATA_KEY, errorMessage);
+            mReceiver.send(FAILURE_RESULT, data);
         } else {
             Address address = addresses.get(0);
-            ArrayList<String> addressFragments = new ArrayList<String>();
-
-            // Fetch the address lines using getAddressLine,
-            // join them, and send them to the thread.
-            for(int i = 0; i <= address.getMaxAddressLineIndex(); i++) {
-                addressFragments.add(address.getAddressLine(i));
-            }
             Log.i(TAG, getString(R.string.address_found));
-            deliverResultToReceiver(SUCCESS_RESULT,
-                    TextUtils.join(System.getProperty("line.separator"),
-                            addressFragments));
+            data.putParcelable(RESULT_DATA_KEY, address);
+            mReceiver.send(SUCCESS_RESULT,
+                    data);
         }
-
-
-    }
-
-    private void deliverResultToReceiver(int resultCode, String message) {
-        Bundle bundle = new Bundle();
-        bundle.putString(RESULT_DATA_KEY, message);
-        mReceiver.send(resultCode, bundle);
     }
 }

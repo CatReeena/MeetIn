@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">MeetIn</string>
     <string name="raised_money">Собрано: %1$s</string>
+    <string name="raised_money_and_total">Собрано: %1$s из %2$s</string>
     <string name="funding_percent">%1$d %%</string>
 
     <plurals name="days_left">
