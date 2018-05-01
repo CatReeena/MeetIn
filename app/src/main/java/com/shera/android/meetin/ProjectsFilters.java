@@ -2,15 +2,13 @@ package com.shera.android.meetin;
 
 import com.shera.android.meetin.entities.Category;
 
-import java.util.UUID;
-
 /**
  * Created by Shera on 17.04.2018.
  */
 
-public class TaskFilters {
+public class ProjectsFilters {
     private Long id;
-    ProjectPosition projectPosition;
+    Position position;
     private Category category;
     private boolean followedFilterOn = false;
     private boolean successfulFilterOn = false;
@@ -19,21 +17,21 @@ public class TaskFilters {
     private boolean mostFundedFilterOn = false;
     private boolean endDateFilterOn = false;
 
-    public TaskFilters(ProjectPosition projectPosition){
-        this.projectPosition = projectPosition;
+    public ProjectsFilters(Position position){
+        this.position = position;
     }
 
-    public TaskFilters(Long id,
-                       ProjectPosition projectPosition,
-                       Category category,
-                       boolean followedFilterOn,
-                       boolean successfulFilterOn,
-                       boolean popularFilterOn,
-                       boolean newestFilterOn,
-                       boolean mostFundedFilterOn,
-                       boolean endDateFilterOn) {
+    public ProjectsFilters(Long id,
+                           Position position,
+                           Category category,
+                           boolean followedFilterOn,
+                           boolean successfulFilterOn,
+                           boolean popularFilterOn,
+                           boolean newestFilterOn,
+                           boolean mostFundedFilterOn,
+                           boolean endDateFilterOn) {
         this.id = id;
-        this.projectPosition = projectPosition;
+        this.position = position;
         this.category = category;
         this.followedFilterOn = followedFilterOn;
         this.successfulFilterOn = successfulFilterOn;
@@ -107,17 +105,14 @@ public class TaskFilters {
         this.endDateFilterOn = endDateFilterOn;
     }
 
-    public ProjectPosition getProjectPosition() {
-        return projectPosition;
+    public Position getPosition() {
+        return position;
     }
 
-    public void setProjectPosition(ProjectPosition projectPosition) {
-        this.projectPosition = projectPosition;
+    public void setPosition(Position position) {
+        this.position = position;
     }
 
-    public static enum ProjectPosition {
-        FIRST_PROJECT, LAST_PROJECT, FRESH
-    }
 
 }
 

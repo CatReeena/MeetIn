@@ -1,10 +1,10 @@
-package com.shera.android.meetin;
+package com.shera.android.meetin.ui;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
+
+import com.shera.android.meetin.SingleFragmentActivity;
 
 public class ProjectListActivity extends SingleFragmentActivity {
 

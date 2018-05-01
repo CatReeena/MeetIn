@@ -25,4 +25,5 @@
     <string name="reward_taken_times">%1$d раз из %2$d возможных</string>
     <string name="reward_chosen">Взнос сделан:</string>
     <string name="dash">-</string>
+    <string name="name_and_surname">%1$s %2$s</string>
 </resources>

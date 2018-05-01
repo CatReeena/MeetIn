@@ -1,4 +1,4 @@
-package com.shera.android.meetin;
+package com.shera.android.meetin.ui;
 
 import android.content.Context;
 import android.content.Intent;
@@ -16,6 +16,8 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.shera.android.meetin.ItemsFetch;
+import com.shera.android.meetin.R;
 import com.shera.android.meetin.entities.Project;
 import com.shera.android.meetin.entities.Reward;
 import com.squareup.picasso.Picasso;
@@ -25,7 +27,6 @@ import org.joda.time.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class ProjectFragment extends Fragment {
 
@@ -92,25 +93,13 @@ public class ProjectFragment extends Fragment {
         mProjectComments = v.findViewById(R.id.project_comments);
         mProjectUpdates = v.findViewById(R.id.project_updates);
         mProjectVideos = v.findViewById(R.id.project_videos);
-        mRewardRecyclerView = (RecyclerView) v.findViewById(R.id.reward_recycler_view);
+        mRewardRecyclerView = v.findViewById(R.id.reward_recycler_view);
         mRewardRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRewardRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-               if(!recyclerView.canScrollVertically(-1))
-                {
-                    // --------------------------------------IMPLEMENT--------------------------------------
-                }
-            }
-        });
-
-        Long crimeId = (Long) getArguments().getSerializable(ARG_PROJECT_ID);
-        new FetchProjectTask().execute(crimeId);
+        Long projectId = (Long) getArguments().getSerializable(ARG_PROJECT_ID);
+        new FetchProjectTask().execute(projectId);
         return v;
 
     }
-
 
     private void setupAdapter()
     {
@@ -196,7 +185,7 @@ public class ProjectFragment extends Fragment {
 
         @Override
         protected Project doInBackground(Long... params) {
-            return new ProjectFetch().downloadProjectById(params[0]);
+            return new ItemsFetch().downloadProjectById(params[0]);
         }
 
         @Override
@@ -235,7 +224,8 @@ public class ProjectFragment extends Fragment {
                     mProjectCommentsLayout.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
-                            // --------------------------------------IMPLEMENT--------------------------------------
+                        Intent intent = CommentsActivity.newIntent(getActivity(), mProject);
+                        startActivity(intent);
                         }
                     });
                 }

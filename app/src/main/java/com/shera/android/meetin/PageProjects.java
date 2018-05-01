@@ -10,10 +10,8 @@ import java.util.List;
  * Created by Shera on 20.04.2018.
  */
 
-//@JsonIgnoreProperties({"pageable","last", "totalPages", "totalElements"})
+
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class Page{
-
-
+public class PageProjects {
     List<Project> content;
 }

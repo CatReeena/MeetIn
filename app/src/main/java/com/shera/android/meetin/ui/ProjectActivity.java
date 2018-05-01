@@ -1,9 +1,10 @@
-package com.shera.android.meetin;
+package com.shera.android.meetin.ui;
 
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.Fragment;
-import java.util.UUID;
+
+import com.shera.android.meetin.SingleFragmentActivity;
 
 public class ProjectActivity extends SingleFragmentActivity implements ProjectFragment.Callbacks {
 

@@ -8,12 +8,13 @@ import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import org.joda.time.LocalDateTime;
 
+import java.io.Serializable;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
 
-public class Project {
+public class Project implements Serializable {
 
     private Long id;
     private String name;

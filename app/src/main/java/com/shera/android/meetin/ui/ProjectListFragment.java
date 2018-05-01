@@ -1,4 +1,4 @@
-package com.shera.android.meetin;
+package com.shera.android.meetin.ui;
 
 
 
@@ -23,7 +23,11 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.shera.android.meetin.entities.Location;
+import com.shera.android.meetin.FetchAddressIntentService;
+import com.shera.android.meetin.ItemsFetch;
+import com.shera.android.meetin.Position;
+import com.shera.android.meetin.ProjectsFilters;
+import com.shera.android.meetin.R;
 import com.shera.android.meetin.entities.Project;
 import com.squareup.picasso.Picasso;
 
@@ -52,7 +56,7 @@ public class ProjectListFragment extends Fragment {
     private RecyclerView mProjectRecyclerView;
     private ProjectAdapter mAdapter;
     private List<Project> mProjectItems = new ArrayList<>();
-    private FetchItemsTask fetchItemsTask;
+    private FetchProjectsTask fetchProjectsTask;
 
     public static ProjectListFragment newInstance() {
         return new ProjectListFragment();
@@ -61,7 +65,7 @@ public class ProjectListFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        addItems(TaskFilters.ProjectPosition.FRESH);
+        addItems(Position.FRESH);
         setRetainInstance(true);
     }
 
@@ -76,14 +80,14 @@ public class ProjectListFragment extends Fragment {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (!recyclerView.canScrollVertically(1)) {
-                    if (fetchItemsTask.getStatus()== AsyncTask.Status.FINISHED) {
-                        addItems(TaskFilters.ProjectPosition.LAST_PROJECT);
+                    if (fetchProjectsTask.getStatus()== AsyncTask.Status.FINISHED) {
+                        addItems(Position.LAST);
                     }
                 }
                 else if(!recyclerView.canScrollVertically(-1))
                 {
-                    if (fetchItemsTask.getStatus()== AsyncTask.Status.FINISHED) {
-                       addItems(TaskFilters.ProjectPosition.FIRST_PROJECT);
+                    if (fetchProjectsTask.getStatus()== AsyncTask.Status.FINISHED) {
+                       addItems(Position.FIRST);
                     }
                 }
             }
@@ -92,16 +96,16 @@ public class ProjectListFragment extends Fragment {
         return v;
     }
 
-    public void addItems(TaskFilters.ProjectPosition projectPosition)
+    public void addItems(Position position)
     {
-        fetchItemsTask = new FetchItemsTask();
+        fetchProjectsTask = new FetchProjectsTask();
         if(mProjectItems.isEmpty())
         {
-            fetchItemsTask.execute(getFilters(TaskFilters.ProjectPosition.FRESH));
+            fetchProjectsTask.execute(getFilters(Position.FRESH));
         }
         else {
-            fetchItemsTask.execute(
-                    getFilters(projectPosition));
+            fetchProjectsTask.execute(
+                    getFilters(position));
         }
     }
 
@@ -115,12 +119,12 @@ public class ProjectListFragment extends Fragment {
             }
     }
 
-    public TaskFilters getFilters(TaskFilters.ProjectPosition projectPosition)
+    public ProjectsFilters getFilters(Position position)
     {
-        switch (projectPosition) {
-            case LAST_PROJECT:
-                return new TaskFilters(mProjectItems.get(mProjectItems.size() - 1).getId(),
-                        TaskFilters.ProjectPosition.LAST_PROJECT,
+        switch (position) {
+            case LAST:
+                return new ProjectsFilters(mProjectItems.get(mProjectItems.size() - 1).getId(),
+                        Position.LAST,
                         null,
                         false,
                         false,
@@ -128,9 +132,9 @@ public class ProjectListFragment extends Fragment {
                         false,
                         false,
                         false);
-            case FIRST_PROJECT:
-                return new TaskFilters(mProjectItems.get(0).getId(),
-                        TaskFilters.ProjectPosition.FIRST_PROJECT,
+            case FIRST:
+                return new ProjectsFilters(mProjectItems.get(0).getId(),
+                        Position.FIRST,
                         null,
                         false,
                         false,
@@ -138,7 +142,7 @@ public class ProjectListFragment extends Fragment {
                         false,
                         false,
                         false);
-                default: return new TaskFilters(TaskFilters.ProjectPosition.FRESH);
+                default: return new ProjectsFilters(Position.FRESH);
         }
     }
 
@@ -255,7 +259,7 @@ public class ProjectListFragment extends Fragment {
             mProjectItems = projectItems;
         }
 
-        public void setGalleryItems(List<Project> projectItems){mProjectItems = projectItems;}
+        public void setProjectItems(List<Project> projectItems){mProjectItems = projectItems;}
 
         @Override
         public ProjectHolder onCreateViewHolder(ViewGroup viewGroup, int viewType) {
@@ -274,33 +278,33 @@ public class ProjectListFragment extends Fragment {
         }
     }
 
-    private class FetchItemsTask extends AsyncTask<TaskFilters,Void,List<Project>> {
+    private class FetchProjectsTask extends AsyncTask<ProjectsFilters,Void,List<Project>> {
 
-        private TaskFilters.ProjectPosition projectPosition;
+        private Position position;
 
         @Override
-        protected List<Project> doInBackground(TaskFilters... params) {
-            projectPosition = params[0].getProjectPosition();
-            return new ProjectFetch().downloadProjects(params[0]);
+        protected List<Project> doInBackground(ProjectsFilters... params) {
+            position = params[0].getPosition();
+            return new ItemsFetch().downloadProjects(params[0]);
         }
 
         @Override
         protected void onPostExecute(List<Project> items) {
             if(items != null) {
-                switch (projectPosition)
+                switch (position)
                 {
-                    case FIRST_PROJECT:
+                    case FIRST:
                         mProjectItems.addAll(0,items);
                         mAdapter.notifyItemRangeInserted(0,items.size());
                         break;
-                    case LAST_PROJECT:
+                    case LAST:
                         mProjectItems.addAll(items);
-                        mAdapter.setGalleryItems(mProjectItems);  //update adapter (maybe separate method)
+                        mAdapter.setProjectItems(mProjectItems);  //update adapter (maybe separate method)
                         mAdapter.notifyDataSetChanged();
                         break;
                     case FRESH:
                         mProjectItems = new ArrayList<>(items);
-                        mAdapter.setGalleryItems(mProjectItems);  //update adapter (maybe separate method)
+                        mAdapter.setProjectItems(mProjectItems);  //update adapter (maybe separate method)
                         mAdapter.notifyDataSetChanged();
                         break;
                 }

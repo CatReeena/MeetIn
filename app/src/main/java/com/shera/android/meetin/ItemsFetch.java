@@ -5,75 +5,72 @@ import android.util.Log;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.databind.module.SimpleModule;
-import com.fasterxml.jackson.databind.util.ISO8601DateFormat;
 import com.fasterxml.jackson.datatype.joda.JodaModule;
+import com.shera.android.meetin.entities.Comment;
 import com.shera.android.meetin.entities.Project;
 
 import org.joda.money.Money;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Created by Shera on 17.04.2018.
  */
 
-public class ProjectFetch {
+public class ItemsFetch {
 
     private static final Uri ENDPOINT = Uri.parse("http://192.168.1.93:8080/");
     private static final String STARTER_PATH = "v0/projects/";
-    private static final String TAG = "ProjectFetch";
+    private static final String COMMENTS_PATH = "comments/";
+    private static final String TAG = "ItemsFetch";
 
-    private String buildUrl(TaskFilters taskFilters) {
+    private String buildProjectUrl(ProjectsFilters projectsFilters) {
         Uri.Builder uriBuilder = ENDPOINT.buildUpon();
-        if (taskFilters.getCategory() != null) {
-            uriBuilder.path(String.valueOf(taskFilters.getCategory()));
+        if (projectsFilters.getCategory() != null) {
+            uriBuilder.path(String.valueOf(projectsFilters.getCategory()));
         } else {
             uriBuilder.path(String.valueOf(STARTER_PATH));
         }
-        if (taskFilters.getId() != null) {
-            if (taskFilters.getProjectPosition() == TaskFilters.ProjectPosition.FIRST_PROJECT) {
+        if (projectsFilters.getId() != null) {
+            if (projectsFilters.getPosition() == Position.FIRST) {
                 uriBuilder.appendQueryParameter("firstProjectId",
-                        String.valueOf(taskFilters.getId()));
+                        String.valueOf(projectsFilters.getId()));
             } else {
                 uriBuilder.appendQueryParameter("lastProjectId",
-                        String.valueOf(taskFilters.getId()));
+                        String.valueOf(projectsFilters.getId()));
             }
         }
-        if (taskFilters.isEndDateFilterOn()) {
+        if (projectsFilters.isEndDateFilterOn()) {
             uriBuilder.appendQueryParameter("isEndDateFilterOn", "true");
         }
-        if (taskFilters.isFollowedFilterOn()) {
+        if (projectsFilters.isFollowedFilterOn()) {
             uriBuilder.appendQueryParameter("isFollowedFilterOn", "true");
         }
-        if (taskFilters.isMostFundedFilterOn()) {
+        if (projectsFilters.isMostFundedFilterOn()) {
             uriBuilder.appendQueryParameter("isMostFundedFilterOn", "true");
         }
-        if (taskFilters.isNewestFilterOn()) {
+        if (projectsFilters.isNewestFilterOn()) {
             uriBuilder.appendQueryParameter("isNewestFilterOn", "true");
         }
-        if (taskFilters.isPopularFilterOn()) {
+        if (projectsFilters.isPopularFilterOn()) {
             uriBuilder.appendQueryParameter("isPopularFilterOn", "true");
         }
-        if (taskFilters.isSuccessfulFilterOn()) {
+        if (projectsFilters.isSuccessfulFilterOn()) {
             uriBuilder.appendQueryParameter("isSuccessfulFilterOn", "true");
         }
         return uriBuilder.build().toString();
     }
 
-    public List<Project> downloadProjects(TaskFilters taskFilters) {
-        String url = buildUrl(taskFilters);
+    public List<Project> downloadProjects(ProjectsFilters projectsFilters) {
+        String url = buildProjectUrl(projectsFilters);
         try {
-            Page projects = createTemplate().getForObject(url, Page.class);
+            PageProjects projects = createTemplate().getForObject(url, PageProjects.class);
             return projects.content;
         } catch (RestClientException e) {
             Log.e(TAG, e.getMessage(), e);
@@ -110,6 +107,35 @@ public class ProjectFetch {
         try {
             Project project = createTemplate().getForObject(url, Project.class);
             return project;
+        } catch (RestClientException e) {
+            Log.e(TAG, e.getMessage(), e);
+        }
+        return null;
+    }
+
+    public List<Comment> downloadComments(CommentsFilters commentsFilters)
+    {
+        Uri.Builder uriBuilder = ENDPOINT.buildUpon()
+                .path(STARTER_PATH)
+                .appendPath(String.valueOf(commentsFilters.getCommentId()))
+                .appendPath(COMMENTS_PATH);
+        try {
+            switch (commentsFilters.getPosition())
+            {
+                case FIRST:
+                uriBuilder.appendQueryParameter("firstCommentId",
+                        commentsFilters.getCommentId().toString());
+                break;
+                case LAST:
+                    uriBuilder.appendQueryParameter("lastCommentId",
+                            commentsFilters.getCommentId().toString());
+                    break;
+                case FRESH:
+                    break;
+            }
+            String url = uriBuilder.build().toString();
+            PageComments comments = createTemplate().getForObject(url, PageComments.class);
+            return comments.content;
         } catch (RestClientException e) {
             Log.e(TAG, e.getMessage(), e);
         }
