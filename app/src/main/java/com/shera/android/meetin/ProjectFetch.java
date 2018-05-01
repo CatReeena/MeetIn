@@ -104,7 +104,7 @@ public class ProjectFetch {
     {
         String url = ENDPOINT.buildUpon()
                 .path(STARTER_PATH)
-                .path(String.valueOf(id))
+                .appendPath(String.valueOf(id))
                 .build()
                 .toString();
         try {

@@ -71,14 +71,6 @@ public class ProjectFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Long crimeId = (Long) getArguments().getSerializable(ARG_PROJECT_ID);
-        mProject = new ProjectFetch().downloadProjectById(crimeId);
-        if (mProject==null)
-        {
-            mCallbacks.onUnexistingProjectBehavior();
-        }
-
-
         // --------------------------------------QUESTIONABLE--------------------------------------
         setRetainInstance(true);
     }
@@ -112,60 +104,9 @@ public class ProjectFragment extends Fragment {
                 }
             }
         });
-        mProjectName.setText(mProject.getName());
-        mProjectDescription.setText(mProject.getDescription());
-        if( mProject.getFundingGoal() != null) {
-            mProjectRaisedMoney.setText(getString(R.string.raised_money_and_total,
-                    mProject.getRaisedMoney().toString(),
-                    mProject.getFundingGoal().toString()));
-        }
-        if (mProject.getEndDateTime()!= null) {
-            Duration duration = new Duration(DateTime.now(), mProject.getEndDateTime().toDateTime());
-            int days = (int) duration.getStandardDays(); //---------------------NOT_SURE_ABOUT_THIS---------------------------------------
-            Resources res = getResources();
-            if(days > 0) {
-                mProjectDaysLeft.setText(res.getQuantityString(R.plurals.days_left, days, days));
-            }
-            else{
-                mProjectDaysLeft.setText(res.getQuantityString(R.plurals.days_left, 0, 0));
-            }
-        }
-        Picasso.with(getActivity())
-                .load("https://www.quebecoriginal.com/en/listing/images/800x600/75e8a9e6-ffc5-40d0-aa0e-eeb3518b92e2/august-festival-scene-principale.jpg")
-                .into(mProjectImageView);
 
-        if (!mProject.getComments().isEmpty())
-        {
-            mProjectComments.setEnabled(true);
-            mProjectCommentsLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // --------------------------------------IMPLEMENT--------------------------------------
-                }
-            });
-        }
-
-        if (!mProject.getUpdates().isEmpty())
-        {
-            mProjectUpdates.setEnabled(true);
-            mProjectUpdatesLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // --------------------------------------IMPLEMENT--------------------------------------
-                }
-            });
-        }
-        if (!mProject.getVideoLinks().isEmpty())
-        {
-            mProjectVideos.setEnabled(true);
-            mProjectVideosLayout.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    // --------------------------------------IMPLEMENT--------------------------------------
-                }
-            });
-        }
-        setupAdapter();
+        Long crimeId = (Long) getArguments().getSerializable(ARG_PROJECT_ID);
+        new FetchProjectTask().execute(crimeId);
         return v;
 
     }
@@ -184,17 +125,38 @@ public class ProjectFragment extends Fragment {
     private class RewardHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
        private Reward mReward;
-        // --------------------------------------IMPLEMENT--------------------------------------
+       private TextView mRewardSum;
+       private TextView mRewardDescription;
+       private TextView mRewardDeliveryDate;
+       private TextView mRewardShippedTo;
+       private TextView mRewardBakers;
+
 
         public RewardHolder(View itemView) {
             super(itemView);
-            // --------------------------------------IMPLEMENT--------------------------------------
+            mRewardSum = itemView.findViewById(R.id.reward_sum);
+            mRewardDescription = itemView.findViewById(R.id.reward_description);
+            mRewardDeliveryDate = itemView.findViewById(R.id.reward_delivery_date);
+            mRewardShippedTo = itemView.findViewById(R.id.reward_shipped_to);
+            mRewardBakers = itemView.findViewById(R.id.reward_backers);
             itemView.setOnClickListener(this);
         }
 
         public void bindReward(Reward reward) {
             mReward = reward;
-          // --------------------------------------IMPLEMENT--------------------------------------
+            mRewardSum.setText(getString(R.string.reward_sum, mReward.getMinimalContribution().toString()));
+
+            mRewardDescription.setText(mReward.getDescription());
+            if(mReward.getDeliveryDate() != null){
+                mRewardDeliveryDate.setText(mReward.getDeliveryDate());
+            }
+            if(mReward.getShippedTo() != null)
+            {
+                mRewardShippedTo.setText(mReward.getShippedTo());
+            }
+            if(mReward.getMaximumAmount() != null) {
+                mRewardBakers.setText(getString(R.string.reward_taken_times, mReward.getContributions().size(), mReward.getMaximumAmount()));
+            }
         }
 
         @Override
@@ -230,8 +192,76 @@ public class ProjectFragment extends Fragment {
         }
     }
 
+    private class FetchProjectTask extends AsyncTask<Long,Void,Project> {
 
+        @Override
+        protected Project doInBackground(Long... params) {
+            return new ProjectFetch().downloadProjectById(params[0]);
+        }
 
+        @Override
+        protected void onPostExecute(Project project) {
+            mProject = project;
+            if (mProject == null)
+            {
+                mCallbacks.onUnexistingProjectBehavior();
+            }
+            else {
+                mProjectName.setText(mProject.getName());
+                mProjectDescription.setText(mProject.getDescription());
+                if (mProject.getFundingGoal() != null) {
+                    mProjectRaisedMoney.setText(getString(R.string.raised_money_and_total,
+                            mProject.getRaisedMoney().toString(),
+                            mProject.getFundingGoal().toString()));
+                }
+                mFundingProgressBar.setProgress(mProject.getProgressPercent());
+                mFundingPercent.setText(getString(R.string.funding_percent, mProject.getProgressPercent()));
+                if (mProject.getEndDateTime() != null) {
+                    Duration duration = new Duration(DateTime.now(), mProject.getEndDateTime().toDateTime());
+                    int days = (int) duration.getStandardDays(); //---------------------NOT_SURE_ABOUT_THIS---------------------------------------
+                    Resources res = getResources();
+                    if (days > 0) {
+                        mProjectDaysLeft.setText(res.getQuantityString(R.plurals.days_left, days, days));
+                    } else {
+                        mProjectDaysLeft.setText(res.getQuantityString(R.plurals.days_left, 0, 0));
+                    }
+                }
+                Picasso.with(getActivity())
+                        .load("https://www.quebecoriginal.com/en/listing/images/800x600/75e8a9e6-ffc5-40d0-aa0e-eeb3518b92e2/august-festival-scene-principale.jpg")
+                        .into(mProjectImageView);
+
+                if (!mProject.getComments().isEmpty()) {
+                    mProjectComments.setEnabled(true);
+                    mProjectCommentsLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // --------------------------------------IMPLEMENT--------------------------------------
+                        }
+                    });
+                }
+
+                if (!mProject.getUpdates().isEmpty()) {
+                    mProjectUpdates.setEnabled(true);
+                    mProjectUpdatesLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // --------------------------------------IMPLEMENT--------------------------------------
+                        }
+                    });
+                }
+                if (!mProject.getVideoLinks().isEmpty()) {
+                    mProjectVideos.setEnabled(true);
+                    mProjectVideosLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            // --------------------------------------IMPLEMENT--------------------------------------
+                        }
+                    });
+                }
+                setupAdapter();
+            }
+        }
+    }
 
 
 }

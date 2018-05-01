@@ -184,7 +184,7 @@ public class ProjectListFragment extends Fragment {
                     .load("https://www.quebecoriginal.com/en/listing/images/800x600/75e8a9e6-ffc5-40d0-aa0e-eeb3518b92e2/august-festival-scene-principale.jpg")
                     .into(mProjectImage);
 
-            mProjectRaisedMoney.setText(getString(R.string.raised_money, mProject.getFundingGoal().toString()));
+            mProjectRaisedMoney.setText(getString(R.string.raised_money, mProject.getRaisedMoney().toString()));
             mFundingPercent.setText(getString(R.string.funding_percent, mProject.getProgressPercent()));
             if (mProject.getEndDateTime()!= null) {
                 Duration duration = new Duration(DateTime.now(), mProject.getEndDateTime().toDateTime());
@@ -309,7 +309,5 @@ public class ProjectListFragment extends Fragment {
             }
         }
     }
-
-
 }
 

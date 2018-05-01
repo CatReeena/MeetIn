@@ -16,9 +16,13 @@
     <string name="updates">Обновления</string>
     <string name="reward">Взносы:</string>
     <string name="delivery_date">Время доставки:</string>
-    <string name="sipment">Доставка</string>
+    <string name="shipment">Доставка</string>
     <string name="service_not_available">Сервис недоступен</string>
     <string name="invalid_lat_long_used">Неверно задана локация</string>
     <string name="no_address_found">Адрес не найден</string>
     <string name="address_found">Адрес найден</string>
+    <string name="reward_sum">Взнос в размере %1$s или больше</string>
+    <string name="reward_taken_times">%1$d раз из %2$d возможных</string>
+    <string name="reward_chosen">Взнос сделан:</string>
+    <string name="dash">-</string>
 </resources>
