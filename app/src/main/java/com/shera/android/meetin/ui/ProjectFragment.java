@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.graphics.Paint;
 import android.location.Address;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -35,6 +36,9 @@ import org.joda.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+import agency.tango.android.avatarview.IImageLoader;
+import agency.tango.android.avatarview.views.AvatarView;
+
 import static com.shera.android.meetin.Constants.LOCATION_DATA_EXTRA;
 import static com.shera.android.meetin.Constants.RECEIVER;
 import static com.shera.android.meetin.Constants.RESULT_DATA_KEY;
@@ -53,6 +57,9 @@ public class ProjectFragment extends Fragment {
     private ProgressBar mFundingProgressBar;
     private TextView mProjectRaisedMoney;
     private TextView mProjectDaysLeft;
+    private TextView mProjectOwners;
+    private AvatarView mProjectOwnersAvatar;
+    private IImageLoader imageLoader;
     private TextView mProjectDescription;
     private ConstraintLayout mProjectCommentsLayout;
     private ConstraintLayout mProjectUpdatesLayout;
@@ -102,6 +109,8 @@ public class ProjectFragment extends Fragment {
         mFundingProgressBar = v.findViewById(R.id.funding_progress_bar);
         mProjectRaisedMoney = v.findViewById(R.id.raised_money);
         mProjectDaysLeft = v.findViewById(R.id.days_left);
+        mProjectOwners = v.findViewById(R.id.project_owners);;
+        mProjectOwnersAvatar = v.findViewById(R.id.project_owners_avatar);
         mProjectDescription = v.findViewById(R.id.project_description);
         mProjectCommentsLayout = v.findViewById(R.id.comments_layout);
         mProjectUpdatesLayout = v.findViewById(R.id.updates_layout);
@@ -274,7 +283,20 @@ public class ProjectFragment extends Fragment {
                                 .into(mProjectImageView);
                     }
                 }
-
+                mProjectOwners.setPaintFlags(mProjectOwners.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                mProjectOwners.setText(TextUtils.join(", ",
+                        mProject.getOwners()));
+                if (mProject.getOwners().get(0).getPersonImageLink()!= null) {
+//                    Picasso.with(getActivity())
+//                            .load(mProject.getOwners().get(0).getPersonImageLink())
+//                            .into(mProjectOwnersAvatar);
+//                    Picasso.with(getActivity())
+//                            .load("https://orig00.deviantart.net/df4b/f/2012/096/4/8/happy_birthday_avatar_01_by_nice_spice-d4v5u95.png")
+//                            .into(mProjectOwnersAvatar);
+                }
+                Picasso.with(getActivity())
+                            .load("https://orig00.deviantart.net/df4b/f/2012/096/4/8/happy_birthday_avatar_01_by_nice_spice-d4v5u95.png")
+                            .into(mProjectOwnersAvatar);
                 if (!mProject.getCategories().isEmpty()) {
                     String categories = TextUtils.join(", ",
                             mProject.getCategories());
@@ -283,7 +305,6 @@ public class ProjectFragment extends Fragment {
                             mProject.getCategories().size(), categories));
 
                 }
-
                 if (mProject.getLocation()!= null){
                     startIntentService();
                 }

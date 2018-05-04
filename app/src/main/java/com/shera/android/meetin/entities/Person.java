@@ -79,4 +79,12 @@ public class Person implements Serializable {
     public void setPersonImageLink(String personImageLink) {
         this.personImageLink = personImageLink;
     }
+
+    @Override
+    public String toString() {
+        if(surname!= null) {
+            return surname + " " + name;
+        }
+        return name;
+    }
 }
