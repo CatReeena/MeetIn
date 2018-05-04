@@ -3,7 +3,9 @@ package com.shera.android.meetin.entities;
 
 import org.joda.time.LocalDateTime;
 
-public class Comment {
+import java.io.Serializable;
+
+public class Comment implements Serializable{
 
     private Long id;
     private Project project;

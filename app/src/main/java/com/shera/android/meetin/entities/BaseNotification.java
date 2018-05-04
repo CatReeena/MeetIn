@@ -1,34 +1,27 @@
 package com.shera.android.meetin.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import org.joda.time.LocalDateTime;
 
+import java.io.Serializable;
 
-public class BaseNotification {
+
+public class BaseNotification implements Serializable {
 
     private Long id;
+    @JsonProperty("sent")
     private LocalDateTime dateTime;
     private String message;
     private Project project;
     private Person receiver;
+    @JsonProperty("type")
+    protected NotificationType notificationType;
 
-    /**
-     * Constructs new generic notification that has message and refers to some project.
-     *
-     * @param message notification message
-     * @param receiver person who will receive the notification
-     * @param dateTime creation date and time
-     * @param project project, referenced by the notification
-     */
-    public BaseNotification(String message, Person receiver, LocalDateTime dateTime,
-                            Project project) {
-        this.message = message;
-        this.receiver = receiver;
-        this.dateTime = dateTime;
-        this.project = project;
-    }
-
-    protected BaseNotification() {
-
+    public BaseNotification() {
+        if (notificationType == null) {
+            notificationType = NotificationType.BASE;
+        }
     }
 
     public String getMessage() {
@@ -69,6 +62,14 @@ public class BaseNotification {
 
     public void setReceiver(Person receiver) {
         this.receiver = receiver;
+    }
+
+    public NotificationType getNotificationType() {
+        return notificationType;
+    }
+
+    public void setNotificationType(NotificationType notificationType) {
+        this.notificationType = notificationType;
     }
 
 }

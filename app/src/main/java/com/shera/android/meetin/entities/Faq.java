@@ -1,7 +1,9 @@
 package com.shera.android.meetin.entities;
 
 
-public class Faq {
+import java.io.Serializable;
+
+public class Faq implements Serializable {
 
     private Long id;
     private Project project;

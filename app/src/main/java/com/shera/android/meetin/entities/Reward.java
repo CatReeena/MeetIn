@@ -1,18 +1,24 @@
 package com.shera.android.meetin.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.io.Serializable;
 import java.util.List;
 import org.joda.money.Money;
 
-public class Reward {
+public class Reward implements Serializable {
 
     private Long id;
     private Project project;
     private List<Contribution> contributions;
+    @JsonProperty("minimal_contribution")
     private Money minimalContribution;
-    private Integer maximumAmount;
+    private Integer limit;
     private String description;
+    @JsonProperty("delivery_date")
     private String deliveryDate;
-    private String shippedTo;
+    @JsonProperty("shipping_location")
+    private String shippingLocation;
 
     public Long getId() {
         return id;
@@ -46,12 +52,12 @@ public class Reward {
         this.minimalContribution = minimalContribution;
     }
 
-    public Integer getMaximumAmount() {
-        return maximumAmount;
+    public Integer getLimit() {
+        return limit;
     }
 
-    public void setMaximumAmount(Integer maximumAmount) {
-        this.maximumAmount = maximumAmount;
+    public void setLimit(Integer limit) {
+        this.limit = limit;
     }
 
     public String getDescription() {
@@ -70,11 +76,11 @@ public class Reward {
         this.deliveryDate = deliveryDate;
     }
 
-    public String getShippedTo() {
-        return shippedTo;
+    public String getShippingLocation() {
+        return shippingLocation;
     }
 
-    public void setShippedTo(String shippedTo) {
-        this.shippedTo = shippedTo;
+    public void setShippingLocation(String shippingLocation) {
+        this.shippingLocation = shippingLocation;
     }
 }

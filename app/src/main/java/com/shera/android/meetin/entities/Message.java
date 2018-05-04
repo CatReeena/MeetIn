@@ -2,8 +2,10 @@ package com.shera.android.meetin.entities;
 
 import org.joda.time.LocalDateTime;
 
+import java.io.Serializable;
 
-public class Message {
+
+public class Message implements Serializable {
 
     private Long id;
     private Person sender;

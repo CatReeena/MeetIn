@@ -1,9 +1,10 @@
 package com.shera.android.meetin.entities;
 
+import java.io.Serializable;
 import java.util.List;
 
 
-public class Category {
+public class Category implements Serializable {
 
     private Long id;
     private List<Project> projects;
@@ -50,5 +51,10 @@ public class Category {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return name;
     }
 }

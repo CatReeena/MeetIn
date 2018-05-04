@@ -27,7 +27,7 @@ public class ItemsFetch {
 
     private static final Uri ENDPOINT = Uri.parse("http://192.168.1.93:8080/");
     private static final String STARTER_PATH = "v0/projects/";
-    private static final String COMMENTS_PATH = "comments/";
+    private static final String COMMENTS_PATH = "comments";
     private static final String TAG = "ItemsFetch";
 
     private String buildProjectUrl(ProjectsFilters projectsFilters) {
@@ -117,7 +117,7 @@ public class ItemsFetch {
     {
         Uri.Builder uriBuilder = ENDPOINT.buildUpon()
                 .path(STARTER_PATH)
-                .appendPath(String.valueOf(commentsFilters.getCommentId()))
+                .appendPath(String.valueOf(commentsFilters.getProjectId()))
                 .appendPath(COMMENTS_PATH);
         try {
             switch (commentsFilters.getPosition())

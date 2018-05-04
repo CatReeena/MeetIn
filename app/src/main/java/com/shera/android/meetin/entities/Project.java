@@ -18,6 +18,8 @@ public class Project implements Serializable {
 
     private Long id;
     private String name;
+    @JsonProperty("short_description")
+    private String shortDescription;
     private String description;
     private Location location;
     @JsonProperty("starts")
@@ -30,6 +32,8 @@ public class Project implements Serializable {
     private Money raisedMoney;
     @JsonProperty("project_image")
     private String projectImageLink;
+    private ProjectType type;
+    private ProjectVisibility visibility;
     @JsonProperty("gallery_videos")
     private List<String> videoLinks = new ArrayList<>();
     @JsonProperty("gallery_images")
@@ -197,6 +201,30 @@ public class Project implements Serializable {
 
     public void setRewards(List<Reward> rewards) {
         this.rewards = rewards;
+    }
+
+    public String getShortDescription() {
+        return shortDescription;
+    }
+
+    public void setShortDescription(String shortDescription) {
+        this.shortDescription = shortDescription;
+    }
+
+    public ProjectType getType() {
+        return type;
+    }
+
+    public void setType(ProjectType type) {
+        this.type = type;
+    }
+
+    public ProjectVisibility getVisibility() {
+        return visibility;
+    }
+
+    public void setVisibility(ProjectVisibility visibility) {
+        this.visibility = visibility;
     }
 
     public int getProgressPercent() {

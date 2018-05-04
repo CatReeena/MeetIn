@@ -37,21 +37,16 @@ import org.joda.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.shera.android.meetin.Constants.LOCATION_DATA_EXTRA;
+import static com.shera.android.meetin.Constants.RECEIVER;
+import static com.shera.android.meetin.Constants.RESULT_DATA_KEY;
+import static com.shera.android.meetin.Constants.SUCCESS_RESULT;
+
 /**
  * Created by Shera on 17.04.2018.
  */
 
 public class ProjectListFragment extends Fragment {
-
-    public static final int SUCCESS_RESULT = 0;
-    public static final int FAILURE_RESULT = 1;
-    public static final String PACKAGE_NAME =
-            "com.shera.android.meetin";
-    public static final String RECEIVER = PACKAGE_NAME + ".RECEIVER";
-    public static final String RESULT_DATA_KEY = PACKAGE_NAME +
-            ".RESULT_DATA_KEY";
-    public static final String LOCATION_DATA_EXTRA = PACKAGE_NAME +
-            ".LOCATION_DATA_EXTRA";
 
     private RecyclerView mProjectRecyclerView;
     private ProjectAdapter mAdapter;
@@ -184,9 +179,6 @@ public class ProjectListFragment extends Fragment {
                             .into(mProjectImage);
                 }
             }
-            Picasso.with(getActivity())
-                    .load("https://www.quebecoriginal.com/en/listing/images/800x600/75e8a9e6-ffc5-40d0-aa0e-eeb3518b92e2/august-festival-scene-principale.jpg")
-                    .into(mProjectImage);
 
             mProjectRaisedMoney.setText(getString(R.string.raised_money, mProject.getRaisedMoney().toString()));
             mFundingPercent.setText(getString(R.string.funding_percent, mProject.getProgressPercent()));
@@ -209,6 +201,7 @@ public class ProjectListFragment extends Fragment {
 
             if (mProject.getLocation()!= null){
                 startIntentService();
+
             }
         }
 
@@ -298,13 +291,14 @@ public class ProjectListFragment extends Fragment {
                         mAdapter.notifyItemRangeInserted(0,items.size());
                         break;
                     case LAST:
+                        int prevSize = mProjectItems.size();
                         mProjectItems.addAll(items);
-                        mAdapter.setProjectItems(mProjectItems);  //update adapter (maybe separate method)
-                        mAdapter.notifyDataSetChanged();
+                        mAdapter.setProjectItems(mProjectItems);
+                        mAdapter.notifyItemRangeInserted(prevSize,items.size());
                         break;
                     case FRESH:
                         mProjectItems = new ArrayList<>(items);
-                        mAdapter.setProjectItems(mProjectItems);  //update adapter (maybe separate method)
+                        mAdapter.setProjectItems(mProjectItems);
                         mAdapter.notifyDataSetChanged();
                         break;
                 }

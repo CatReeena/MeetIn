@@ -1,13 +1,19 @@
 package com.shera.android.meetin.entities;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import org.joda.time.LocalDateTime;
 
-public class Update {
+import java.io.Serializable;
+
+public class Update implements Serializable {
 
     private Long id;
     private Project project;
+    @JsonProperty("posted")
     private LocalDateTime dateTime;
     private String message;
+    @JsonProperty("short_message")
     private String shortMessage;
 
     public Long getId() {

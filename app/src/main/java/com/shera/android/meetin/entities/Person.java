@@ -1,6 +1,10 @@
 package com.shera.android.meetin.entities;
 
-public class Person {
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import java.io.Serializable;
+
+public class Person implements Serializable {
 
     private Long id;
     private String name;
@@ -9,6 +13,8 @@ public class Person {
     private String email;
     private String country;
     private String city;
+    @JsonProperty("image_link")
+    private String personImageLink;
 
     public Long getId() {
         return id;
@@ -64,5 +70,13 @@ public class Person {
 
     public void setCity(String city) {
         this.city = city;
+    }
+
+    public String getPersonImageLink() {
+        return personImageLink;
+    }
+
+    public void setPersonImageLink(String personImageLink) {
+        this.personImageLink = personImageLink;
     }
 }

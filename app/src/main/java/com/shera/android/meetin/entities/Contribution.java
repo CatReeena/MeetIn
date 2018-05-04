@@ -4,8 +4,10 @@ package com.shera.android.meetin.entities;
 import org.joda.money.Money;
 import org.joda.time.LocalDateTime;
 
+import java.io.Serializable;
 
-public class Contribution {
+
+public class Contribution implements Serializable {
 
     private Long id;
     private Person contributor;

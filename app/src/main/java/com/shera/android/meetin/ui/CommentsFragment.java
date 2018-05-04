@@ -1,8 +1,9 @@
 package com.shera.android.meetin.ui;
 
-import android.app.Fragment;
+
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -31,10 +32,10 @@ public class CommentsFragment extends Fragment {
     private List<Comment> mCommentItems = new ArrayList<>();
     private FetchCommentsTask fetchCommentsTask;
 
-    public static ProjectFragment newInstance(Project project) {
+    public static CommentsFragment newInstance(Project project) {
         Bundle args = new Bundle();
         args.putSerializable(ARG_PROJECT, project);
-        ProjectFragment fragment = new ProjectFragment();
+        CommentsFragment fragment = new CommentsFragment();
         fragment.setArguments(args);
         return fragment;
     }
@@ -49,7 +50,7 @@ public class CommentsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.list_item_comment, container, false);
+        View v = inflater.inflate(R.layout.fragment_comments_list, container, false);
         mCommentRecyclerView = v.findViewById(R.id.comment_recycler_view);
         mCommentRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mCommentRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -57,13 +58,15 @@ public class CommentsFragment extends Fragment {
             public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
                 super.onScrollStateChanged(recyclerView, newState);
                 if (!recyclerView.canScrollVertically(1)) {
-                    if (fetchCommentsTask.getStatus()== AsyncTask.Status.FINISHED) {
+                    if (fetchCommentsTask == null
+                            || fetchCommentsTask.getStatus()== AsyncTask.Status.FINISHED) {
                         addItems(Position.LAST);
                     }
                 }
                 else if(!recyclerView.canScrollVertically(-1))
                 {
-                    if (fetchCommentsTask.getStatus()== AsyncTask.Status.FINISHED) {
+                    if (fetchCommentsTask == null ||
+                            fetchCommentsTask.getStatus()== AsyncTask.Status.FINISHED) {
                         addItems(Position.FIRST);
                     }
                 }

@@ -1,14 +1,19 @@
 package com.shera.android.meetin.ui;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.location.Address;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.os.ResultReceiver;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +21,10 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.shera.android.meetin.FetchAddressIntentService;
 import com.shera.android.meetin.ItemsFetch;
 import com.shera.android.meetin.R;
+import com.shera.android.meetin.entities.Category;
 import com.shera.android.meetin.entities.Project;
 import com.shera.android.meetin.entities.Reward;
 import com.squareup.picasso.Picasso;
@@ -27,6 +34,11 @@ import org.joda.time.Duration;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.shera.android.meetin.Constants.LOCATION_DATA_EXTRA;
+import static com.shera.android.meetin.Constants.RECEIVER;
+import static com.shera.android.meetin.Constants.RESULT_DATA_KEY;
+import static com.shera.android.meetin.Constants.SUCCESS_RESULT;
 
 public class ProjectFragment extends Fragment {
 
@@ -48,7 +60,10 @@ public class ProjectFragment extends Fragment {
     private TextView mProjectComments;
     private TextView mProjectUpdates;
     private TextView mProjectVideos;
+    private TextView mProjectCategory;
+    private TextView mProjectLocation;
     private Callbacks mCallbacks;
+    private AddressResultReceiver mResultReceiver = new AddressResultReceiver(new Handler());
 
 
     public static ProjectFragment newInstance(Long projectId) {
@@ -80,6 +95,7 @@ public class ProjectFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_project, container, false);
+        v.setVisibility(View.INVISIBLE);
         mProjectImageView =  v.findViewById(R.id.project_image_detailed);
         mProjectName = v.findViewById(R.id.project_name_detailed);
         mFundingPercent = v.findViewById(R.id.funding_percent);
@@ -94,7 +110,10 @@ public class ProjectFragment extends Fragment {
         mProjectUpdates = v.findViewById(R.id.project_updates);
         mProjectVideos = v.findViewById(R.id.project_videos);
         mRewardRecyclerView = v.findViewById(R.id.reward_recycler_view);
+        mProjectCategory =  v.findViewById(R.id.full_categories);
+        mProjectLocation =  v.findViewById(R.id.full_location);
         mRewardRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
+        mRewardRecyclerView.setNestedScrollingEnabled(false);
         Long projectId = (Long) getArguments().getSerializable(ARG_PROJECT_ID);
         new FetchProjectTask().execute(projectId);
         return v;
@@ -110,6 +129,38 @@ public class ProjectFragment extends Fragment {
             mRewardRecyclerView.setAdapter(mAdapter);
         }
     }
+
+    protected void startIntentService() {
+        Intent intent = new Intent(getActivity(), FetchAddressIntentService.class);
+        intent.putExtra(RECEIVER, mResultReceiver);
+        intent.putExtra(LOCATION_DATA_EXTRA, mProject.getLocation());
+        getActivity().startService(intent);
+    }
+
+    class AddressResultReceiver extends ResultReceiver {
+        @SuppressLint("RestrictedApi")
+        public AddressResultReceiver(Handler handler) {
+            super(handler);
+        }
+
+        @Override
+        protected void onReceiveResult(int resultCode, Bundle resultData) {
+
+            if (resultData == null) {
+                return;
+            }
+
+            if (resultCode == SUCCESS_RESULT) {
+                Address mAddressOutput = resultData.getParcelable(RESULT_DATA_KEY);
+                if(mAddressOutput.getLocality() != null) {
+                    mProjectLocation.setText(mAddressOutput.getLocality());
+                }else if(mAddressOutput.getAdminArea() != null){
+                    mProjectLocation.setText(mAddressOutput.getAdminArea());
+                }
+            }
+        }
+    }
+
 
     private class RewardHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
@@ -133,18 +184,18 @@ public class ProjectFragment extends Fragment {
 
         public void bindReward(Reward reward) {
             mReward = reward;
+            //----------------------------------------------------DELETE_AFTER??----------------------------
             mRewardSum.setText(getString(R.string.reward_sum, mReward.getMinimalContribution().toString()));
-
             mRewardDescription.setText(mReward.getDescription());
             if(mReward.getDeliveryDate() != null){
                 mRewardDeliveryDate.setText(mReward.getDeliveryDate());
             }
-            if(mReward.getShippedTo() != null)
+            if(mReward.getShippingLocation() != null)
             {
-                mRewardShippedTo.setText(mReward.getShippedTo());
+                mRewardShippedTo.setText(mReward.getShippingLocation());
             }
-            if(mReward.getMaximumAmount() != null) {
-                mRewardBakers.setText(getString(R.string.reward_taken_times, mReward.getContributions().size(), mReward.getMaximumAmount()));
+            if(mReward.getLimit() != null) {
+                mRewardBakers.setText(getString(R.string.reward_taken_times, mReward.getContributions().size(), mReward.getLimit()));
             }
         }
 
@@ -196,6 +247,7 @@ public class ProjectFragment extends Fragment {
                 mCallbacks.onUnexistingProjectBehavior();
             }
             else {
+                getView().setVisibility(View.VISIBLE);
                 mProjectName.setText(mProject.getName());
                 mProjectDescription.setText(mProject.getDescription());
                 if (mProject.getFundingGoal() != null) {
@@ -215,9 +267,26 @@ public class ProjectFragment extends Fragment {
                         mProjectDaysLeft.setText(res.getQuantityString(R.plurals.days_left, 0, 0));
                     }
                 }
-                Picasso.with(getActivity())
-                        .load("https://www.quebecoriginal.com/en/listing/images/800x600/75e8a9e6-ffc5-40d0-aa0e-eeb3518b92e2/august-festival-scene-principale.jpg")
-                        .into(mProjectImageView);
+                if (mProject.getProjectImageLink()!= null) {
+                    {
+                        Picasso.with(getActivity())
+                                .load(mProject.getProjectImageLink())
+                                .into(mProjectImageView);
+                    }
+                }
+
+                if (!mProject.getCategories().isEmpty()) {
+                    String categories = TextUtils.join(", ",
+                            mProject.getCategories());
+                    Resources res = getResources();
+                    mProjectCategory.setText(res.getQuantityString(R.plurals.categories,
+                            mProject.getCategories().size(), categories));
+
+                }
+
+                if (mProject.getLocation()!= null){
+                    startIntentService();
+                }
 
                 if (!mProject.getComments().isEmpty()) {
                     mProjectComments.setEnabled(true);
@@ -248,6 +317,7 @@ public class ProjectFragment extends Fragment {
                         }
                     });
                 }
+                mRewardItems = mProject.getRewards();
                 setupAdapter();
             }
         }

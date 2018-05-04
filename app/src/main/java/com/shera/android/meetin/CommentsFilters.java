@@ -30,4 +30,12 @@ public class CommentsFilters {
     public void setCommentId(Long commentId) {
         this.commentId = commentId;
     }
+
+    public Long getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
+    }
 }

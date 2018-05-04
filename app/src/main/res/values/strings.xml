@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">MeetIn</string>
     <string name="raised_money">Собрано: %1$s</string>
-    <string name="raised_money_and_total">Собрано: %1$s из %2$s</string>
+    <string name="raised_money_and_total">"Собрано: %1$s\nиз %2$s"</string>
     <string name="funding_percent">%1$d %%</string>
 
     <plurals name="days_left">
@@ -11,12 +11,17 @@
         <item quantity="other">%d дней осталось</item>
     </plurals>
 
+    <plurals name="categories">
+        <item quantity="one"><b>Категория:</b> %s</item>
+        <item quantity="other"><b>Категории:</b> %s</item>
+    </plurals>
+
     <string name="comments">Комментарии</string>
     <string name="video">Видео</string>
     <string name="updates">Обновления</string>
-    <string name="reward">Взносы:</string>
+    <string name="reward">Награда за взнос:</string>
     <string name="delivery_date">Время доставки:</string>
-    <string name="shipment">Доставка</string>
+    <string name="shipment">Доставка:</string>
     <string name="service_not_available">Сервис недоступен</string>
     <string name="invalid_lat_long_used">Неверно задана локация</string>
     <string name="no_address_found">Адрес не найден</string>
