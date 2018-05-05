@@ -16,6 +16,13 @@
         <item quantity="other"><b>Категории:</b> %s</item>
     </plurals>
 
+    <plurals name="reward_taken_times">
+        <item quantity="one">%1$d раз из %2$d возможных</item>
+        <item quantity="few">%1$d раза из %2$d возможных</item>
+        <item quantity="many">%1$d раз из %2$d возможных</item>
+        <item quantity="other">%1$d раз из %2$d возможных</item>
+    </plurals>
+
     <string name="comments">Комментарии</string>
     <string name="video">Видео</string>
     <string name="updates">Обновления</string>
@@ -27,7 +34,6 @@
     <string name="no_address_found">Адрес не найден</string>
     <string name="address_found">Адрес найден</string>
     <string name="reward_sum">Взнос в размере %1$s или больше</string>
-    <string name="reward_taken_times">%1$d раз из %2$d возможных</string>
     <string name="reward_chosen">Взнос сделан:</string>
     <string name="dash">-</string>
     <string name="name_and_surname">%1$s %2$s</string>

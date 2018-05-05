@@ -25,7 +25,6 @@ import android.widget.TextView;
 import com.shera.android.meetin.FetchAddressIntentService;
 import com.shera.android.meetin.ItemsFetch;
 import com.shera.android.meetin.R;
-import com.shera.android.meetin.entities.Category;
 import com.shera.android.meetin.entities.Project;
 import com.shera.android.meetin.entities.Reward;
 import com.squareup.picasso.Picasso;
@@ -36,7 +35,6 @@ import org.joda.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
-import agency.tango.android.avatarview.IImageLoader;
 import agency.tango.android.avatarview.views.AvatarView;
 
 import static com.shera.android.meetin.Constants.LOCATION_DATA_EXTRA;
@@ -59,7 +57,6 @@ public class ProjectFragment extends Fragment {
     private TextView mProjectDaysLeft;
     private TextView mProjectOwners;
     private AvatarView mProjectOwnersAvatar;
-    private IImageLoader imageLoader;
     private TextView mProjectDescription;
     private ConstraintLayout mProjectCommentsLayout;
     private ConstraintLayout mProjectUpdatesLayout;
@@ -161,15 +158,11 @@ public class ProjectFragment extends Fragment {
 
             if (resultCode == SUCCESS_RESULT) {
                 Address mAddressOutput = resultData.getParcelable(RESULT_DATA_KEY);
-                if(mAddressOutput.getLocality() != null) {
-                    mProjectLocation.setText(mAddressOutput.getLocality());
-                }else if(mAddressOutput.getAdminArea() != null){
-                    mProjectLocation.setText(mAddressOutput.getAdminArea());
-                }
+                mProjectLocation.setText(mAddressOutput.getAddressLine(0));
+
             }
         }
     }
-
 
     private class RewardHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
@@ -204,7 +197,10 @@ public class ProjectFragment extends Fragment {
                 mRewardShippedTo.setText(mReward.getShippingLocation());
             }
             if(mReward.getLimit() != null) {
-                mRewardBakers.setText(getString(R.string.reward_taken_times, mReward.getContributions().size(), mReward.getLimit()));
+                Resources res = getResources();
+                mRewardBakers.setText(res.getQuantityString(R.plurals.reward_taken_times,  mReward.getContributions().size(),  mReward.getContributions().size(), mReward.getLimit() ));
+
+               // mRewardBakers.setText(getString(R.string.reward_taken_times, mReward.getContributions().size(), mReward.getLimit()));
             }
         }
 
@@ -287,16 +283,14 @@ public class ProjectFragment extends Fragment {
                 mProjectOwners.setText(TextUtils.join(", ",
                         mProject.getOwners()));
                 if (mProject.getOwners().get(0).getPersonImageLink()!= null) {
-//                    Picasso.with(getActivity())
-//                            .load(mProject.getOwners().get(0).getPersonImageLink())
-//                            .into(mProjectOwnersAvatar);
-//                    Picasso.with(getActivity())
-//                            .load("https://orig00.deviantart.net/df4b/f/2012/096/4/8/happy_birthday_avatar_01_by_nice_spice-d4v5u95.png")
-//                            .into(mProjectOwnersAvatar);
-                }
-                Picasso.with(getActivity())
-                            .load("https://orig00.deviantart.net/df4b/f/2012/096/4/8/happy_birthday_avatar_01_by_nice_spice-d4v5u95.png")
+                    Picasso.with(getActivity())
+                            .load(mProject.getOwners().get(0).getPersonImageLink())
+                            .placeholder(R.drawable.ic_account_circle_gray_24px)
                             .into(mProjectOwnersAvatar);
+                }else
+                {
+                    mProjectOwnersAvatar.setImageResource(R.drawable.ic_account_circle_white_24px);
+                }
                 if (!mProject.getCategories().isEmpty()) {
                     String categories = TextUtils.join(", ",
                             mProject.getCategories());

@@ -19,9 +19,12 @@ import com.shera.android.meetin.R;
 import com.shera.android.meetin.entities.Comment;
 import com.shera.android.meetin.entities.Person;
 import com.shera.android.meetin.entities.Project;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import agency.tango.android.avatarview.views.AvatarView;
 
 public class CommentsFragment extends Fragment {
 
@@ -123,6 +126,7 @@ public class CommentsFragment extends Fragment {
         private TextView mNickname;
         private TextView mCommentText;
         private TextView mCommentTime;
+        private AvatarView mAuthorAvatar;
 
 
         public CommentHolder(View itemView) {
@@ -131,18 +135,20 @@ public class CommentsFragment extends Fragment {
             mNickname = itemView.findViewById(R.id.nickname);
             mCommentText = itemView.findViewById(R.id.comment_text);
             mCommentTime = itemView.findViewById(R.id.comment_time);
+            mAuthorAvatar = itemView.findViewById(R.id.avatar_img);
             itemView.setOnClickListener(this);
         }
 
         public void bindComment(Comment comment) {
             mComment = comment;
-            //--------------------------------------WAITING_FOR_AVATAR----------------------------------
-//            if(mComment.getAvatar() != null)
-//            {
-//                Picasso.with(getActivity())
-//                        .load("https://www.quebecoriginal.com/en/listing/images/800x600/75e8a9e6-ffc5-40d0-aa0e-eeb3518b92e2/august-festival-scene-principale.jpg")
-//                        .into(mAvatar);
-//            }
+            if (mComment.getAuthor().getPersonImageLink() != null)
+            {
+                Picasso.with(getActivity())
+                        .load(mComment.getAuthor().getPersonImageLink())
+                        .into(mAvatar);
+            }else {
+                mAvatar.setBackgroundResource(R.drawable.ic_account_circle_gray_24px);
+            }
             Person author = mComment.getAuthor();
             mNickname.setText(getString(R.string.name_and_surname,
                     author.getName(),
