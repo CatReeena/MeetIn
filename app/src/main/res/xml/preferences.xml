@@ -1,28 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
-        android:title="@string/sorting_type">
 
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="isPopularFilterOn"
-        android:summary="@string/popular_summary"
-        android:title="@string/most_popular"/>
+    <PreferenceCategory
+        android:title="@string/nav_filters">
+
+    <ListPreference
+        android:key="sorting_style"
+        android:title="Сортировка проектов"
+        android:summary="Укажите предпочитаемый метод сортировки"
+        android:defaultValue="1"
+        android:entries="@array/sorting_style"
+        android:entryValues="@array/sorting_style"
+        android:dialogTitle="@string/first_to_show" />
+
     <CheckBoxPreference
         android:defaultValue="false"
         android:key="isSuccessFilterOn"
         android:summary="@string/success_summary"
         android:title="@string/successful"/>
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="isNewestFilterOn"
-        android:title="@string/newest"/>
-    <CheckBoxPreference
-        android:defaultValue="false"
-        android:key="isFundedFilterOn"
-        android:summary="@string/funded_summary"
-        android:title="@string/most_funded"/>
 
     </PreferenceCategory>
 
@@ -36,6 +32,11 @@
     <com.shera.android.meetin.DatePreference
         android:key="endDateFilter"
         android:title="@string/end_date" />
+
+    <SwitchPreference
+        android:key="locationFilterEnabled"
+        android:summaryOff="@string/location_filter_off"
+        android:summaryOn="@string/location_filter_on" />
     </PreferenceCategory>
 
 </PreferenceScreen>

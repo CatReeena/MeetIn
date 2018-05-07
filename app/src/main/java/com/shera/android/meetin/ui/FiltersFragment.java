@@ -27,25 +27,25 @@ public class FiltersFragment extends PreferenceFragment {
         addPreferencesFromResource(R.xml.preferences);
         setRetainInstance(true);
 
-        final ArrayList<CheckBoxPreference> alViewMode = new ArrayList<>();
+//        final ArrayList<CheckBoxPreference> alViewMode = new ArrayList<>();
         switchPreference = (SwitchPreference) getPreferenceManager().findPreference("endDateFilterEnable");
         datePreference = (DatePreference) getPreferenceManager().findPreference("endDateFilter");
         datePreference.setEnabled(switchPreference.isChecked());
-
-        Preference.OnPreferenceClickListener listener = new Preference.OnPreferenceClickListener() {
-            @Override
-            public boolean onPreferenceClick(Preference preference) {
-                for (CheckBoxPreference cbp : alViewMode) {
-                    if (!cbp.getKey().equals(preference.getKey()) && cbp.isChecked()) {
-                        cbp.setChecked(false);
-                    }
-                    else if (cbp.getKey().equals(preference.getKey()) && !cbp.isChecked()) {
-                        cbp.setChecked(true);
-                    }
-                }
-                return false;
-            }
-        };
+//
+//        Preference.OnPreferenceClickListener listener = new Preference.OnPreferenceClickListener() {
+//            @Override
+//            public boolean onPreferenceClick(Preference preference) {
+//                for (CheckBoxPreference cbp : alViewMode) {
+//                    if (!cbp.getKey().equals(preference.getKey()) && cbp.isChecked()) {
+//                        cbp.setChecked(false);
+//                    }
+//                    else if (cbp.getKey().equals(preference.getKey()) && !cbp.isChecked()) {
+//                        cbp.setChecked(true);
+//                    }
+//                }
+//                return false;
+//            }
+//        };
 
         switchPreference.setOnPreferenceChangeListener(new Preference.OnPreferenceChangeListener() {
             @Override
@@ -55,19 +55,19 @@ public class FiltersFragment extends PreferenceFragment {
             }
         });
 
-        CheckBoxPreference popularFilter = (CheckBoxPreference) getPreferenceManager().findPreference("isPopularFilterOn");
-        popularFilter.setOnPreferenceClickListener(listener);
-
-        CheckBoxPreference successFilter = (CheckBoxPreference) getPreferenceManager().findPreference("isSuccessFilterOn");
-        successFilter.setOnPreferenceClickListener(listener);
-
-        CheckBoxPreference newestFilter = (CheckBoxPreference) getPreferenceManager().findPreference("isNewestFilterOn");
-        newestFilter.setOnPreferenceClickListener(listener);
-
-        CheckBoxPreference fundedFilter = (CheckBoxPreference) getPreferenceManager().findPreference("isFundedFilterOn");
-        fundedFilter.setOnPreferenceClickListener(listener);
-
-        alViewMode.addAll(Arrays.asList(popularFilter,successFilter,newestFilter,fundedFilter));
+//        CheckBoxPreference popularFilter = (CheckBoxPreference) getPreferenceManager().findPreference("isPopularFilterOn");
+//        popularFilter.setOnPreferenceClickListener(listener);
+//
+//        CheckBoxPreference successFilter = (CheckBoxPreference) getPreferenceManager().findPreference("isSuccessFilterOn");
+//        successFilter.setOnPreferenceClickListener(listener);
+//
+//        CheckBoxPreference newestFilter = (CheckBoxPreference) getPreferenceManager().findPreference("isNewestFilterOn");
+//        newestFilter.setOnPreferenceClickListener(listener);
+//
+//        CheckBoxPreference fundedFilter = (CheckBoxPreference) getPreferenceManager().findPreference("isFundedFilterOn");
+//        fundedFilter.setOnPreferenceClickListener(listener);
+//
+//        alViewMode.addAll(Arrays.asList(popularFilter,successFilter,newestFilter,fundedFilter));
 
     }
 

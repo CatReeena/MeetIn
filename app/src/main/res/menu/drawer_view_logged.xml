@@ -23,6 +23,7 @@
             android:title="@string/nav_categories" >
 
         <menu>
+            <group android:checkableBehavior="single">
             <item
                 android:id="@+id/navigation_sub_item_1"
                 android:icon="@drawable/ic_library_add_white_24px"
@@ -63,6 +64,7 @@
                 android:id="@+id/navigation_sub_item_10"
                 android:icon="@drawable/ic_library_add_white_24px"
                 android:title="10"/>
+            </group>
         </menu>
         </item>
     </group>

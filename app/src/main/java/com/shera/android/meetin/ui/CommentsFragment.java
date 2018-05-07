@@ -80,11 +80,6 @@ public class CommentsFragment extends Fragment {
         mProject = (Project) getArguments().getSerializable(ARG_PROJECT);
         mCommentItems = mProject.getComments();
         setupAdapter();
-
-        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getContext());
-        String strUserName = SP.getString("endDateFilter","1999.01.01");
-
-
         return v;
     }
 

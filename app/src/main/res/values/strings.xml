@@ -48,12 +48,21 @@
     <string name="newest">Новые</string>
     <string name="most_funded">С наибольшими взносами</string>
     <string name="most_followed">Наиболее понравившиеся</string>
-    <string name="end_date">Дата окончания</string>
-    <string name="sorting_type">Первыми вывести:</string>
+    <string name="end_date">Укажите дату завершения</string>
     <string name="popular_summary">Проекты, за которыми следит наибольшее количество полльзователей</string>
     <string name="success_summary">Проекты, которые набрали итоговую сумму</string>
     <string name="funded_summary">Проекты с максимальными взносами</string>
-    <string name="end_filter_on">Выключить фильтр по дате окончания проекта</string>
-    <string name="end_filter_off">Включить фильтр по дате окончания проекта</string>
-    <string name="additional_filters">Дополнительно:</string>
+    <string name="end_filter_on">Выключить фильтр по дате завершения</string>
+    <string name="end_filter_off">Включить фильтр по дате завершения</string>
+    <string name="additional_filters">Дополнительно</string>
+    <string name="location_filter_off">Включить фильтр по местоположению</string>
+    <string name="location_filter_on">Включить фильтр по местоположению</string>
+    <string name="first_to_show">Первыми вывести:</string>
+
+
+    <string-array name="sorting_style">
+        <item>@string/newest</item>
+        <item>@string/most_popular</item>
+        <item>@string/most_funded</item>
+    </string-array>
 </resources>
