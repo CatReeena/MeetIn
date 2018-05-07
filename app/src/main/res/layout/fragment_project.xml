@@ -372,7 +372,7 @@
             app:layout_constraintTop_toBottomOf="@+id/card_view2">
 
             <TextView
-                android:id="@+id/textView8"
+                android:id="@+id/reward_header"
                 style="@style/HeaderText"
                 android:layout_width="0dp"
                 android:layout_height="40dp"
@@ -396,7 +396,7 @@
                 android:layout_marginTop="8dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView8" />
+                app:layout_constraintTop_toBottomOf="@+id/reward_header" />
         </android.support.constraint.ConstraintLayout>
     </android.support.constraint.ConstraintLayout>
 </android.support.v4.widget.NestedScrollView>

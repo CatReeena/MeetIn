@@ -66,9 +66,9 @@ public class ProjectFragment extends Fragment {
     private TextView mProjectVideos;
     private TextView mProjectCategory;
     private TextView mProjectLocation;
+    private TextView mRewardsHeader;
     private Callbacks mCallbacks;
     private AddressResultReceiver mResultReceiver = new AddressResultReceiver(new Handler());
-
 
     public static ProjectFragment newInstance(Long projectId) {
         Bundle args = new Bundle();
@@ -118,12 +118,12 @@ public class ProjectFragment extends Fragment {
         mRewardRecyclerView = v.findViewById(R.id.reward_recycler_view);
         mProjectCategory =  v.findViewById(R.id.full_categories);
         mProjectLocation =  v.findViewById(R.id.full_location);
+        mRewardsHeader = v.findViewById(R.id.reward_header);
         mRewardRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRewardRecyclerView.setNestedScrollingEnabled(false);
         Long projectId = (Long) getArguments().getSerializable(ARG_PROJECT_ID);
         new FetchProjectTask().execute(projectId);
         return v;
-
     }
 
     private void setupAdapter()
@@ -199,8 +199,6 @@ public class ProjectFragment extends Fragment {
             if(mReward.getLimit() != null) {
                 Resources res = getResources();
                 mRewardBakers.setText(res.getQuantityString(R.plurals.reward_taken_times,  mReward.getContributions().size(),  mReward.getContributions().size(), mReward.getLimit() ));
-
-               // mRewardBakers.setText(getString(R.string.reward_taken_times, mReward.getContributions().size(), mReward.getLimit()));
             }
         }
 
@@ -333,10 +331,11 @@ public class ProjectFragment extends Fragment {
                     });
                 }
                 mRewardItems = mProject.getRewards();
+                if (mRewardItems.isEmpty()) {
+                    mRewardsHeader.setVisibility(View.INVISIBLE);
+                }
                 setupAdapter();
             }
         }
     }
-
-
 }

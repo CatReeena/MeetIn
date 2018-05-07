@@ -1,8 +1,10 @@
 package com.shera.android.meetin.ui;
 
 
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -78,6 +80,11 @@ public class CommentsFragment extends Fragment {
         mProject = (Project) getArguments().getSerializable(ARG_PROJECT);
         mCommentItems = mProject.getComments();
         setupAdapter();
+
+        SharedPreferences SP = PreferenceManager.getDefaultSharedPreferences(getContext());
+        String strUserName = SP.getString("endDateFilter","1999.01.01");
+
+
         return v;
     }
 

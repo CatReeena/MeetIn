@@ -25,6 +25,9 @@
         <activity android:name=".ui.CommentsActivity"
             android:parentActivityName=".ui.ProjectActivity">
         </activity>
+        <activity android:name=".ui.FiltersActivity"
+            android:parentActivityName=".ui.ProjectListActivity">
+        </activity>
         <service
             android:name=".FetchAddressIntentService"
             android:exported="false"/>
