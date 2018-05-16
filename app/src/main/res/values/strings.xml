@@ -58,6 +58,7 @@
     <string name="location_filter_off">Включить фильтр по местоположению</string>
     <string name="location_filter_on">Включить фильтр по местоположению</string>
     <string name="first_to_show">Первыми вывести:</string>
+    <string name="date_hint">дд.мм.гггг</string>
 
 
     <string-array name="sorting_style">

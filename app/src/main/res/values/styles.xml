@@ -21,6 +21,11 @@
         <item name="android:fontFamily">@font/montserrat</item>
         <item name="android:textSize">10sp</item>
     </style>
+    <style name="MenuItemText" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/accent</item>
+        <item name="android:fontFamily">@font/montserrat</item>
+        <item name="android:textSize">10sp</item>
+    </style>
 
 
 </resources>
