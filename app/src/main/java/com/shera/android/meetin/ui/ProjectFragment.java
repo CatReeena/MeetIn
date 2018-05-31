@@ -38,7 +38,9 @@ import java.util.List;
 import agency.tango.android.avatarview.views.AvatarView;
 
 import static com.shera.android.meetin.Constants.LOCATION_DATA_EXTRA;
+import static com.shera.android.meetin.Constants.LOCATION_PERMISSIONS;
 import static com.shera.android.meetin.Constants.RECEIVER;
+import static com.shera.android.meetin.Constants.REQUEST_LOCATION_PERMISSIONS;
 import static com.shera.android.meetin.Constants.RESULT_DATA_KEY;
 import static com.shera.android.meetin.Constants.SUCCESS_RESULT;
 
@@ -278,11 +280,14 @@ public class ProjectFragment extends Fragment {
                     }
                 }
                 mProjectOwners.setPaintFlags(mProjectOwners.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+                mProjectOwners.setText(mProject.getOwner().getName());
+                if(!mProject.getTeamMembers().isEmpty()) {
                 mProjectOwners.setText(TextUtils.join(", ",
-                        mProject.getOwners()));
-                if (mProject.getOwners().get(0).getPersonImageLink()!= null) {
+                        mProject.getTeamMembers()));
+                }
+                if (mProject.getOwner().getPersonImageLink()!= null) {
                     Picasso.with(getActivity())
-                            .load(mProject.getOwners().get(0).getPersonImageLink())
+                            .load(mProject.getOwner().getPersonImageLink())
                             .placeholder(R.drawable.ic_account_circle_gray_24px)
                             .into(mProjectOwnersAvatar);
                 }else

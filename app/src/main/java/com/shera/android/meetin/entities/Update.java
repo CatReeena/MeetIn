@@ -13,6 +13,7 @@ public class Update implements Serializable {
     @JsonProperty("posted")
     private LocalDateTime dateTime;
     private String message;
+    private String title;
     @JsonProperty("short_message")
     private String shortMessage;
 
@@ -38,6 +39,14 @@ public class Update implements Serializable {
 
     public void setDateTime(LocalDateTime dateTime) {
         this.dateTime = dateTime;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public String getMessage() {

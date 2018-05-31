@@ -4,6 +4,7 @@ package com.shera.android.meetin.entities;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+
 import org.joda.money.CurrencyUnit;
 import org.joda.money.Money;
 import org.joda.time.LocalDateTime;
@@ -26,6 +27,8 @@ public class Project implements Serializable {
     private LocalDateTime startDateTime;
     @JsonProperty("ends")
     private LocalDateTime endDateTime;
+    @JsonProperty("event_date")
+    private LocalDateTime eventDateTime;
     @JsonProperty("funding_goal")
     private Money fundingGoal;
     @JsonProperty("raised")
@@ -38,7 +41,9 @@ public class Project implements Serializable {
     private List<String> videoLinks = new ArrayList<>();
     @JsonProperty("gallery_images")
     private List<String> imageLinks = new ArrayList<>();
-    private List<Person> owners = new ArrayList<>();
+    private Person owner;
+    @JsonProperty("team_members")
+    private List<Person> teamMembers = new ArrayList<>();
     private List<Person> subscribers = new ArrayList<>();
     private List<Contribution> contributions = new ArrayList<>();
     private List<Comment> comments = new ArrayList<>();
@@ -46,6 +51,8 @@ public class Project implements Serializable {
     private List<Category> categories = new ArrayList<>();
     private List<Update> updates = new ArrayList<>();
     private List<Reward> rewards = new ArrayList<>();
+    @JsonProperty("payment_account_id")
+    private String paymentAccountId;
 
     public Project() {
 
@@ -99,6 +106,14 @@ public class Project implements Serializable {
         this.endDateTime = endDateTime;
     }
 
+    public LocalDateTime getEventDateTime() {
+        return eventDateTime;
+    }
+
+    public void setEventDateTime(LocalDateTime eventDateTime) {
+        this.eventDateTime = eventDateTime;
+    }
+
     public Money getFundingGoal() {
         return fundingGoal;
     }
@@ -139,12 +154,20 @@ public class Project implements Serializable {
         this.imageLinks = imageLinks;
     }
 
-    public List<Person> getOwners() {
-        return owners;
+    public Person getOwner() {
+        return owner;
     }
 
-    public void setOwners(List<Person> owners) {
-        this.owners = owners;
+    public void setOwner(Person owner) {
+        this.owner = owner;
+    }
+
+    public List<Person> getTeamMembers() {
+        return teamMembers;
+    }
+
+    public void setTeamMembers(List<Person> teamMembers) {
+        this.teamMembers = teamMembers;
     }
 
     public List<Person> getSubscribers() {
@@ -225,6 +248,14 @@ public class Project implements Serializable {
 
     public void setVisibility(ProjectVisibility visibility) {
         this.visibility = visibility;
+    }
+
+    public String getPaymentAccountId() {
+        return paymentAccountId;
+    }
+
+    public void setPaymentAccountId(String paymentAccountId) {
+        this.paymentAccountId = paymentAccountId;
     }
 
     public int getProgressPercent() {

@@ -39,10 +39,22 @@
     <string name="name_and_surname">%1$s %2$s</string>
     <string name="nav_new_project">Создать проект</string>
     <string name="nav_my_projects">Мои проекты</string>
+    <string name="nav_notifications">Оповещения</string>
+    <string name="nav_follow">Отслеживаются</string>
     <string name="nav_saved_projects">Сохраненные проекты</string>
     <string name="nav_categories">Категории</string>
     <string name="nav_filters">Фильтры</string>
     <string name="nav_login">Вход/Регистрация</string>
+
+    <string name="nav_category_1">Бизнес</string>
+    <string name="nav_category_2">Еда</string>
+    <string name="nav_category_3">Искусство</string>
+    <string name="nav_category_4">Образование</string>
+    <string name="nav_category_5">Развлечения</string>
+    <string name="nav_category_6">Спорт</string>
+    <string name="nav_category_7">Экскурсии</string>
+    <string name="nav_category_8">Другое</string>
+
     <string name="most_popular">Популярные</string>
     <string name="successful">Успешные</string>
     <string name="newest">Новые</string>
@@ -57,6 +69,7 @@
     <string name="additional_filters">Дополнительно</string>
     <string name="location_filter_off">Включить фильтр по местоположению</string>
     <string name="location_filter_on">Включить фильтр по местоположению</string>
+    <string name="location_filter_hint">Выбрать место</string>
     <string name="first_to_show">Первыми вывести:</string>
     <string name="date_hint">дд.мм.гггг</string>
 
@@ -66,4 +79,5 @@
         <item>@string/most_popular</item>
         <item>@string/most_funded</item>
     </string-array>
+    <string name="title_activity_maps">Местоположение</string>
 </resources>

@@ -39,4 +39,12 @@
         android:summaryOn="@string/location_filter_on" />
     </PreferenceCategory>
 
+
+        <Preference
+            android:key="chooseLocation"
+            android:summary ="@string/location_filter_hint">
+            <intent android:action="com.shera.android.meetin.ui/MapsActivity"/>
+        </Preference>
+
+
 </PreferenceScreen>

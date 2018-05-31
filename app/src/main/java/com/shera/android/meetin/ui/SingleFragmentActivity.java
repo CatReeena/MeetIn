@@ -13,6 +13,9 @@ import android.view.MenuItem;
 
 import com.shera.android.meetin.R;
 
+import static com.shera.android.meetin.Constants.LOCATION_PERMISSIONS;
+import static com.shera.android.meetin.Constants.REQUEST_LOCATION_PERMISSIONS;
+
 /**
  * Created by Shera on 31.01.2018.
  */
@@ -55,9 +58,14 @@ public abstract class SingleFragmentActivity extends AppCompatActivity {
 
                         // Add code here to update the UI based on the item selected
                         // For example, swap UI fragments here
+                        Intent intent;
                     switch (menuItem.getItemId()) {
                         case R.id.nav_filters:
-                            Intent intent = new Intent(SingleFragmentActivity.this, FiltersActivity.class);
+                            intent = new Intent(SingleFragmentActivity.this, FiltersActivity.class);
+                            startActivity(intent);
+                            break;
+                        case  R.id.nav_saved_projects:
+                            intent = new Intent(SingleFragmentActivity.this, MapsActivity.class);
                             startActivity(intent);
                             break;
                     }

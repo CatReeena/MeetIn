@@ -1,6 +1,8 @@
 package com.shera.android.meetin.entities;
 
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 import org.joda.time.LocalDateTime;
 
 import java.io.Serializable;
@@ -11,6 +13,7 @@ public class Comment implements Serializable{
     private Project project;
     private Person author;
     private String message;
+    @JsonProperty("posted")
     private LocalDateTime dateTime;
 
     public Long getId() {
