@@ -1,0 +1,2 @@
+# MeetIn
+Android crowdfunding application
